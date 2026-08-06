@@ -64,6 +64,15 @@ sed '/^## Knowledge$/d' "$fixture/structure.valid" > \
 expect_rejected "a structure guide without Knowledge"
 mv "$fixture/structure.valid" "$fixture/docs/REPOSITORY-STRUCTURE.md"
 
+for section in "Manifesto agent.yaml" "Arquivos ignorados" GitHub \
+  "Documentos raiz"; do
+  cp "$fixture/docs/REPOSITORY-STRUCTURE.md" "$fixture/structure.valid"
+  sed "/^## ${section}$/d" "$fixture/structure.valid" > \
+    "$fixture/docs/REPOSITORY-STRUCTURE.md"
+  expect_rejected "a structure guide without $section"
+  mv "$fixture/structure.valid" "$fixture/docs/REPOSITORY-STRUCTURE.md"
+done
+
 cp "$fixture/evaluations/scenarios/T5.md" "$fixture/T5.md.valid"
 rm "$fixture/evaluations/scenarios/T5.md"
 expect_rejected "fewer than five core task scenarios"

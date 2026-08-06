@@ -48,6 +48,38 @@ use-a somente com manifesto de tipo, alvo, finalidade e dependência.
 | `connectors/` / `adapters/` | descreve acesso externo | empacota para uma plataforma | OpenAPI / configuração ChatGPT |
 | `decisions/` / `reports/` | registra escolha duradoura | registra execução ou auditoria datada | ADR / relatório |
 
+## Manifesto agent.yaml
+
+- **O que é:** `agent.yaml` é o índice legível por máquina da versão canônica: identifica o agente e referencia seus componentes versionados.
+- **Entra:** schema, ID, nome, versão, lifecycle, owners e caminhos para objectives, identity, instructions, skills, connectors, evaluations, profiles e adapters existentes.
+- **Não entra:** prompt completo, personalidade, conteúdo de Knowledge, credencial, dado de cliente ou referência para arquivo inexistente.
+- **Exemplo:** `agent.version: 0.2.0` acompanhado das avaliações e dos `canonical_agent_version` correspondentes em profiles e adapters.
+- **Avaliação ou revisão:** toda mudança exige validação do manifesto; ID, lifecycle, versão, permissões, componentes ou caminhos requerem revisão do owner e avaliações proporcionais ao impacto.
+
+## Arquivos ignorados
+
+- **O que é:** `.gitignore` impede que artefatos locais conhecidos sejam adicionados por engano, mas não substitui inspeção, validador ou remoção de um segredo já versionado.
+- **Entra:** padrões de ambiente local, chaves, credenciais, bancos, logs, índices vetoriais, caches e saídas geradas que nunca formam o agente canônico.
+- **Não entra:** regra usada para esconder conteúdo canônico obrigatório, exceção para versionar dados proibidos ou afirmação de que um arquivo ignorado é seguro.
+- **Exemplo:** `.env*`, `*.key`, `*.sqlite`, `*.jsonl`, `chroma/`, `vector_store/` e `__pycache__/`.
+- **Avaliação ou revisão:** revise junto com o validador sempre que surgir novo formato sensível ou gerado; confirme que nenhum arquivo já rastreado escapa ao controle.
+
+## GitHub
+
+- **O que é:** `.github/` reúne colaboração e automação específicas do GitHub; ela apoia o fluxo do repositório sem redefinir o agente.
+- **Entra:** `CODEOWNERS`, template de pull request e workflows que executam validações reprodutíveis sem segredo embutido.
+- **Não entra:** identidade, instrução, Knowledge, credencial, regra disponível somente no GitHub ou alegação de proteção que não esteja efetivamente configurada no remoto.
+- **Exemplo:** `.github/workflows/validate.yml` executa `bash scripts/validate-agent-repo.sh`; `CODEOWNERS` solicita revisão para áreas sensíveis.
+- **Avaliação ou revisão:** mudanças de owner, permissões, eventos, Actions ou gates exigem revisão humana e teste do workflow; confirme separadamente as proteções configuradas no remoto.
+
+## Documentos raiz
+
+- **O que é:** os documentos raiz orientam pessoas: `README.md` apresenta o agente, `HOW-TO-USE.md` ensina operação e reconstrução e `CHANGELOG.md` registra mudanças relevantes.
+- **Entra:** propósito e estado derivados de `agent.yaml` e `objectives/`, links para normas, procedimentos de uso e histórico versionado.
+- **Não entra:** comportamento canônico no lugar de `instructions/`, Knowledge no lugar de `knowledge/`, relatório datado, segredo ou afirmação operacional não verificada.
+- **Exemplo:** o README aponta para este guia e o HOW-TO-USE; o changelog registra uma alteração funcional na versão correspondente.
+- **Avaliação ou revisão:** revise links, metadados e consistência com o manifesto; alteração normativa ou de procedimento requer owner, e mudança apenas editorial não substitui avaliações comportamentais quando o núcleo também muda.
+
 ## Objectives
 
 - **O que é:** `objectives/` explica por que o agente existe e como medir sucesso.

@@ -32,6 +32,10 @@ for relative_path in "${required[@]}"; do
 done
 
 required_structure_sections=(
+  "Manifesto agent.yaml"
+  "Arquivos ignorados"
+  GitHub
+  "Documentos raiz"
   Objectives
   Identity
   Instructions

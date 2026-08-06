@@ -6,16 +6,22 @@
 | Versão | `0.1.0` |
 | Lifecycle | `source-capture` |
 
-Este repositório contém o núcleo canônico deste agente da Academia de Contadores.
-Profiles e adapters apenas o recortam ou traduzem para um destino; eles não redefinem o comportamento canônico.
+## Propósito
 
-## Início rápido
+Cria e revisa conteúdo para o Desafio Contadora CEO com IA, incluindo revisão
+de claims e validação humana.
 
-1. Crie um repositório privado a partir deste template.
-2. Atualize `agent.yaml`, `objectives/`, `identity/` e `instructions/` para o
-   agente real.
-3. Registre capacidades em `skills/`, conteúdo curado em `knowledge/` e contratos
-   externos em `connectors/`; nunca registre credenciais.
+Este repositório é a fonte de verdade do agente existente. Profiles e adapters
+apenas recortam ou traduzem seu núcleo canônico; não redefinem o comportamento.
+
+## Usar e manter este agente
+
+1. Leia `objectives/`, `identity/` e `instructions/` antes de operar ou alterar o
+   agente; esses diretórios definem missão, papel, comportamento e limites.
+2. Para reconstruir ou adaptar esta versão, siga `HOW-TO-USE.md` e use
+   `agent.yaml` como índice dos componentes canônicos.
+3. Registre novas capacidades em `skills/`, fontes curadas em `knowledge/` e
+   contratos externos em `connectors/`; nunca registre credenciais.
 4. Adicione avaliações para cada mudança comportamental e execute:
 
    ```bash
@@ -33,15 +39,13 @@ Profiles e adapters apenas o recortam ou traduzem para um destino; eles não red
 - [Política de dados e segredos](governance/DATA-AND-SECRETS.md)
 - [Política de mudanças](governance/CHANGE-POLICY.md)
 
-## Proteções no GitHub
+## Proteções versionadas e verificáveis
 
-O repositório remoto é privado e está marcado como template. No plano atual da
-organização, a API do GitHub não disponibiliza rulesets para este repositório
-privado (HTTP 403) nem secret scanning/push protection (HTTP 422). Enquanto
-essas proteções remotas não estiverem disponíveis, `main` permanece sem
-proteção: rulesets e branch protection não estão disponíveis para repositórios
-privados no plano atual. `CODEOWNERS` e o workflow `validate` apenas sinalizam
-e solicitam revisão; não são gates de merge. O controle preventivo ativo é a
-validação local por `scripts/validate-agent-repo.sh`, que bloqueia arquivos
-proibidos e arquivos maiores que 5 MB antes da publicação. Consulte
-`reports/task-3-report.md` para a evidência e os limites exatos.
+O `.gitignore` reduz o risco de adicionar artefatos locais conhecidos, e
+`scripts/validate-agent-repo.sh` rejeita arquivos proibidos, artefatos RAG locais
+e arquivos maiores que 5 MB. O workflow `validate` executa esse validador em
+pull requests e pushes para `main`. O `CODEOWNERS` solicita revisão para áreas
+sensíveis. Workflow e `CODEOWNERS`, isoladamente, não provam bloqueio de merge;
+branch protection, rulesets, visibilidade e demais controles devem ser
+confirmados na configuração remota. Consulte `reports/task-3-report.md` para a
+evidência local e seus limites.
