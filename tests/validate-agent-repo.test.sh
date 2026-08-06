@@ -8,10 +8,7 @@ for f in README.md agent.yaml objectives/mission.md objectives/success-metrics.m
   objectives/non-goals.md identity/soul.md identity/identity.md instructions/system.md \
   instructions/guardrails.md governance/CONTRIBUTING.md governance/CHANGE-POLICY.md \
   governance/RELEASE-POLICY.md governance/DATA-AND-SECRETS.md \
-  governance/RISK-REGISTER.md skills/example-skill/SKILL.md \
-  skills/example-skill/evaluations/basic-scenario.md connectors/rag/README.md \
-  connectors/rag/contract.yaml connectors/rag/evaluations/unavailable.md \
-  profiles/example-public-safe/profile.yaml adapters/example-platform/adapter.yaml \
+  governance/RISK-REGISTER.md \
   .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md .github/workflows/validate.yml \
   scripts/validate-agent-repo.sh; do
   test -f "$root/$f"
@@ -30,6 +27,19 @@ fixture="$(mktemp -d)"
 trap 'rm -rf "$fixture"' EXIT
 cp -R "$root/." "$fixture/"
 rm -rf "$fixture/.git"
+mkdir -p "$fixture/profiles/validation-fixture" \
+  "$fixture/adapters/validation-fixture"
+printf '%s\n' \
+  'schema_version: 1' \
+  'name: validation-fixture' \
+  'canonical_agent_version: 0.1.0' \
+  > "$fixture/profiles/validation-fixture/profile.yaml"
+printf '%s\n' \
+  'schema_version: 1' \
+  'name: validation-fixture' \
+  'canonical_agent_version: 0.1.0' \
+  'target: validation-fixture' \
+  > "$fixture/adapters/validation-fixture/adapter.yaml"
 
 expect_rejected() {
   local name="$1"
@@ -69,32 +79,32 @@ printf x >> "$fixture/size-boundary.bin"
 expect_rejected "a file larger than 5 MB decimal"
 rm "$fixture/size-boundary.bin"
 
-cp "$fixture/profiles/example-public-safe/profile.yaml" "$fixture/profile.yaml.valid"
+cp "$fixture/profiles/validation-fixture/profile.yaml" "$fixture/profile.yaml.valid"
 sed 's/^canonical_agent_version:.*/canonical_agent_version: 9.9.9/' \
-  "$fixture/profile.yaml.valid" > "$fixture/profiles/example-public-safe/profile.yaml"
+  "$fixture/profile.yaml.valid" > "$fixture/profiles/validation-fixture/profile.yaml"
 expect_rejected "a profile targeting another agent.version"
-mv "$fixture/profile.yaml.valid" "$fixture/profiles/example-public-safe/profile.yaml"
+mv "$fixture/profile.yaml.valid" "$fixture/profiles/validation-fixture/profile.yaml"
 
-cp "$fixture/adapters/example-platform/adapter.yaml" "$fixture/adapter.yaml.valid"
+cp "$fixture/adapters/validation-fixture/adapter.yaml" "$fixture/adapter.yaml.valid"
 sed 's/^canonical_agent_version:.*/canonical_agent_version: 9.9.9/' \
-  "$fixture/adapter.yaml.valid" > "$fixture/adapters/example-platform/adapter.yaml"
+  "$fixture/adapter.yaml.valid" > "$fixture/adapters/validation-fixture/adapter.yaml"
 expect_rejected "an adapter targeting another agent.version"
-mv "$fixture/adapter.yaml.valid" "$fixture/adapters/example-platform/adapter.yaml"
+mv "$fixture/adapter.yaml.valid" "$fixture/adapters/validation-fixture/adapter.yaml"
 
 dd if=/dev/zero of="$fixture/too-large.bin" bs=1000000 count=6 >/dev/null 2>&1
 expect_rejected "a file larger than 5 MB"
 rm "$fixture/too-large.bin"
 
-cp "$fixture/profiles/example-public-safe/profile.yaml" "$fixture/profile.yaml.valid"
+cp "$fixture/profiles/validation-fixture/profile.yaml" "$fixture/profile.yaml.valid"
 sed '/canonical_agent_version:/d' "$fixture/profile.yaml.valid" > \
-  "$fixture/profiles/example-public-safe/profile.yaml"
+  "$fixture/profiles/validation-fixture/profile.yaml"
 expect_rejected "a profile without canonical_agent_version"
-mv "$fixture/profile.yaml.valid" "$fixture/profiles/example-public-safe/profile.yaml"
+mv "$fixture/profile.yaml.valid" "$fixture/profiles/validation-fixture/profile.yaml"
 
-cp "$fixture/adapters/example-platform/adapter.yaml" "$fixture/adapter.yaml.valid"
+cp "$fixture/adapters/validation-fixture/adapter.yaml" "$fixture/adapter.yaml.valid"
 sed '/canonical_agent_version:/d' "$fixture/adapter.yaml.valid" > \
-  "$fixture/adapters/example-platform/adapter.yaml"
+  "$fixture/adapters/validation-fixture/adapter.yaml"
 expect_rejected "an adapter without canonical_agent_version"
-mv "$fixture/adapter.yaml.valid" "$fixture/adapters/example-platform/adapter.yaml"
+mv "$fixture/adapter.yaml.valid" "$fixture/adapters/validation-fixture/adapter.yaml"
 
 echo "validate-agent-repo tests passed"
