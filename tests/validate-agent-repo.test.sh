@@ -4,7 +4,7 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")/.." && pwd)"
 validator="$root/scripts/validate-agent-repo.sh"
 
-for f in README.md agent.yaml objectives/mission.md objectives/success-metrics.md \
+for f in README.md HOW-TO-USE.md docs/REPOSITORY-STRUCTURE.md agent.yaml objectives/mission.md objectives/success-metrics.md \
   objectives/non-goals.md identity/soul.md identity/identity.md instructions/system.md \
   instructions/guardrails.md governance/CONTRIBUTING.md governance/CHANGE-POLICY.md \
   governance/RELEASE-POLICY.md governance/DATA-AND-SECRETS.md \
@@ -48,6 +48,21 @@ expect_rejected() {
     return 1
   fi
 }
+cp "$fixture/HOW-TO-USE.md" "$fixture/HOW-TO-USE.md.valid"
+rm "$fixture/HOW-TO-USE.md"
+expect_rejected "a repository without HOW-TO-USE.md"
+mv "$fixture/HOW-TO-USE.md.valid" "$fixture/HOW-TO-USE.md"
+
+cp "$fixture/docs/REPOSITORY-STRUCTURE.md" "$fixture/REPOSITORY-STRUCTURE.md.valid"
+rm "$fixture/docs/REPOSITORY-STRUCTURE.md"
+expect_rejected "a repository without REPOSITORY-STRUCTURE.md"
+mv "$fixture/REPOSITORY-STRUCTURE.md.valid" "$fixture/docs/REPOSITORY-STRUCTURE.md"
+
+cp "$fixture/docs/REPOSITORY-STRUCTURE.md" "$fixture/structure.valid"
+sed '/^## Knowledge$/d' "$fixture/structure.valid" > \
+  "$fixture/docs/REPOSITORY-STRUCTURE.md"
+expect_rejected "a structure guide without Knowledge"
+mv "$fixture/structure.valid" "$fixture/docs/REPOSITORY-STRUCTURE.md"
 
 cp "$fixture/evaluations/scenarios/T5.md" "$fixture/T5.md.valid"
 rm "$fixture/evaluations/scenarios/T5.md"

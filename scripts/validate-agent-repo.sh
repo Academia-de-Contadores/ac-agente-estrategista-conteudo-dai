@@ -10,6 +10,8 @@ fail() {
 
 required=(
   README.md
+  HOW-TO-USE.md
+  docs/REPOSITORY-STRUCTURE.md
   agent.yaml
   objectives/mission.md
   objectives/success-metrics.md
@@ -27,6 +29,27 @@ required=(
 
 for relative_path in "${required[@]}"; do
   test -f "$root/$relative_path" || fail "missing required file: $relative_path"
+done
+
+required_structure_sections=(
+  Objectives
+  Identity
+  Instructions
+  Skills
+  Knowledge
+  Connectors
+  Adapters
+  Profiles
+  "Evaluations e tests"
+  Scripts
+  Governance
+  "Decisions, docs e reports"
+  Relations
+)
+
+for section in "${required_structure_sections[@]}"; do
+  grep -Fqx "## $section" "$root/docs/REPOSITORY-STRUCTURE.md" || \
+    fail "missing required repository-structure section: $section"
 done
 
 read_agent_scalar() {

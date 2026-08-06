@@ -1,26 +1,37 @@
-# Template canônico de agente
+# Estrategista de Conteúdo D.A.I. Oficial
 
-Este repositório é a base agnóstica de plataforma para agentes da Academia de
-Contadores. O núcleo canônico fica em `objectives/`, `identity/` e
-`instructions/`; skills descrevem capacidades reutilizáveis, conectores
-descrevem integrações externas, perfis restringem uma versão canônica e
-adaptadores traduzem essa versão para um destino sem redefinir seu comportamento.
+| Campo | Valor |
+| --- | --- |
+| ID | `ac.estrategista-conteudo-dai` |
+| Versão | `0.1.0` |
+| Lifecycle | `source-capture` |
 
-## Como usar
+Este repositório contém o núcleo canônico deste agente da Academia de Contadores.
+Profiles e adapters apenas o recortam ou traduzem para um destino; eles não redefinem o comportamento canônico.
+
+## Início rápido
 
 1. Crie um repositório privado a partir deste template.
-2. Substitua os valores de exemplo em `agent.yaml` e nos documentos canônicos.
-3. Mantenha cada perfil e adaptador vinculado por `canonical_agent_version`.
-4. Adicione uma avaliação para toda mudança comportamental.
-5. Execute `bash tests/validate-agent-repo.test.sh` antes de abrir um pull request.
+2. Atualize `agent.yaml`, `objectives/`, `identity/` e `instructions/` para o
+   agente real.
+3. Registre capacidades em `skills/`, conteúdo curado em `knowledge/` e contratos
+   externos em `connectors/`; nunca registre credenciais.
+4. Adicione avaliações para cada mudança comportamental e execute:
 
-O Git é a fonte de verdade. Segredos, conversas, dados de clientes, logs,
-corpora ou índices RAG e exportações operacionais não podem ser versionados.
-Endpoints privados e credenciais são fornecidos em runtime por variáveis de
-ambiente; somente seus nomes pertencem aos contratos do repositório.
+   ```bash
+   bash tests/validate-agent-repo.test.sh
+   bash scripts/validate-agent-repo.sh
+   ```
 
-Consulte `governance/` para classificação de mudanças, revisão, versionamento,
-tratamento de dados e riscos.
+5. Siga o processo de contribuição antes de abrir um pull request.
+
+## Guias do repositório
+
+- [Como usar e reconstruir o agente](HOW-TO-USE.md)
+- [Estrutura e destino de cada arquivo](docs/REPOSITORY-STRUCTURE.md)
+- [Como contribuir](governance/CONTRIBUTING.md)
+- [Política de dados e segredos](governance/DATA-AND-SECRETS.md)
+- [Política de mudanças](governance/CHANGE-POLICY.md)
 
 ## Proteções no GitHub
 
