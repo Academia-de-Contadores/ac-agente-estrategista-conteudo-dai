@@ -58,6 +58,95 @@ awk '
   END { exit(found ? 0 : 1) }
 ' "$root/agent.yaml" || fail "evaluations must contain at least one reference"
 
+evaluation_is_referenced() {
+  local relative_path="$1"
+  grep -Fqx "  - $relative_path" "$root/agent.yaml"
+}
+
+scenario_field_is_nonempty() {
+  local path="$1"
+  local field="$2"
+
+  awk -v heading="## $field" '
+    $0 == heading {
+      found = 1
+      next
+    }
+    found && /^##[[:space:]]/ {
+      stopped = 1
+    }
+    found && !stopped && $0 !~ /^[[:space:]]*$/ {
+      nonempty = 1
+    }
+    END {
+      exit(found && nonempty ? 0 : 1)
+    }
+  ' "$path"
+}
+
+validate_scenario_file() {
+  local relative_path="$1"
+  local scenario_id="$2"
+  local path="$root/$relative_path"
+  local field
+
+  test -f "$path" || fail "missing Task 5 scenario: $relative_path"
+  grep -Eq "^# ${scenario_id}[[:space:]]+—[[:space:]]+.+$" "$path" || \
+    fail "scenario must have a nonempty $scenario_id title: $relative_path"
+  evaluation_is_referenced "$relative_path" || \
+    fail "scenario is not referenced by agent.yaml: $relative_path"
+
+  for field in "Entrada" "Saída esperada" "Evidência" "Falha"; do
+    scenario_field_is_nonempty "$path" "$field" || \
+      fail "scenario field '$field' must be present and nonempty: $relative_path"
+  done
+}
+
+validate_scenario_group() {
+  local directory="$1"
+  local prefix="$2"
+  local expected_count="$3"
+  local label="$4"
+  local count index relative_path
+
+  count="$(
+    find "$root/$directory" -maxdepth 1 -type f -name "${prefix}*.md" |
+      wc -l |
+      tr -d '[:space:]'
+  )"
+  test "$count" = "$expected_count" || \
+    fail "$label must contain exactly $expected_count ${prefix} scenario files"
+
+  index=1
+  while test "$index" -le "$expected_count"; do
+    relative_path="$directory/${prefix}${index}.md"
+    validate_scenario_file "$relative_path" "${prefix}${index}"
+    index=$((index + 1))
+  done
+}
+
+validate_scenario_group evaluations/scenarios T 5 "core task coverage"
+validate_scenario_group evaluations/regression H 3 "scope and handoff coverage"
+validate_scenario_group evaluations/security S 3 "security coverage"
+
+if awk '
+  /^connectors:[[:space:]]*$/ { in_connectors = 1; next }
+  in_connectors && /^[^[:space:]]/ { exit }
+  in_connectors && /rag|searchDayRagCorpus/ { found = 1 }
+  END { exit(found ? 0 : 1) }
+' "$root/agent.yaml"; then
+  validate_scenario_group evaluations/regression C 1 \
+    "connector-unavailable coverage"
+else
+  connector_scenario_count="$(
+    find "$root/evaluations/regression" -maxdepth 1 -type f -name 'C*.md' |
+      wc -l |
+      tr -d '[:space:]'
+  )"
+  test "$connector_scenario_count" = "0" || \
+    fail "connector-unavailable scenarios require a declared RAG connector"
+fi
+
 while IFS= read -r -d '' path; do
   name="$(basename "$path")"
   relative_path="${path#"$root/"}"

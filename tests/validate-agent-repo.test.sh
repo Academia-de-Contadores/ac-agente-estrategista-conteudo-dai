@@ -49,6 +49,64 @@ expect_rejected() {
   fi
 }
 
+cp "$fixture/evaluations/scenarios/T5.md" "$fixture/T5.md.valid"
+rm "$fixture/evaluations/scenarios/T5.md"
+expect_rejected "fewer than five core task scenarios"
+mv "$fixture/T5.md.valid" "$fixture/evaluations/scenarios/T5.md"
+
+cp "$fixture/evaluations/scenarios/T5.md" "$fixture/evaluations/scenarios/T6.md"
+expect_rejected "more than five core task scenarios"
+rm "$fixture/evaluations/scenarios/T6.md"
+
+cp "$fixture/evaluations/regression/H3.md" "$fixture/H3.md.valid"
+rm "$fixture/evaluations/regression/H3.md"
+expect_rejected "fewer than three scope and handoff scenarios"
+mv "$fixture/H3.md.valid" "$fixture/evaluations/regression/H3.md"
+
+cp "$fixture/evaluations/regression/H3.md" "$fixture/evaluations/regression/H4.md"
+expect_rejected "more than three scope and handoff scenarios"
+rm "$fixture/evaluations/regression/H4.md"
+
+cp "$fixture/evaluations/security/S3.md" "$fixture/S3.md.valid"
+rm "$fixture/evaluations/security/S3.md"
+expect_rejected "fewer than three security scenarios"
+mv "$fixture/S3.md.valid" "$fixture/evaluations/security/S3.md"
+
+cp "$fixture/evaluations/security/S3.md" "$fixture/evaluations/security/S4.md"
+expect_rejected "more than three security scenarios"
+rm "$fixture/evaluations/security/S4.md"
+
+cp "$fixture/evaluations/scenarios/T1.md" "$fixture/T1.md.valid"
+sed '/^## Falha$/,$ { /^## Falha$/!d; }' "$fixture/T1.md.valid" > "$fixture/evaluations/scenarios/T1.md"
+expect_rejected "a scenario with an empty Falha field"
+mv "$fixture/T1.md.valid" "$fixture/evaluations/scenarios/T1.md"
+
+cp "$fixture/evaluations/security/S1.md" "$fixture/S1.md.valid"
+sed '/^## Evidência$/d' "$fixture/S1.md.valid" > "$fixture/evaluations/security/S1.md"
+expect_rejected "a scenario without an Evidência heading"
+mv "$fixture/S1.md.valid" "$fixture/evaluations/security/S1.md"
+
+cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
+sed '\|evaluations/scenarios/T1.md|d' "$fixture/agent.yaml.valid" > "$fixture/agent.yaml"
+expect_rejected "an unreferenced Task 5 scenario"
+mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
+
+if awk '
+  /^connectors:[[:space:]]*$/ { in_connectors = 1; next }
+  in_connectors && /^[^[:space:]]/ { exit }
+  in_connectors && /rag|searchDayRagCorpus/ { found = 1 }
+  END { exit(found ? 0 : 1) }
+' "$fixture/agent.yaml"; then
+  cp "$fixture/evaluations/regression/C1.md" "$fixture/C1.md.valid"
+  rm "$fixture/evaluations/regression/C1.md"
+  expect_rejected "a RAG connector without its C1 unavailable scenario"
+  mv "$fixture/C1.md.valid" "$fixture/evaluations/regression/C1.md"
+
+  cp "$fixture/evaluations/regression/C1.md" "$fixture/evaluations/regression/C1-extra.md"
+  expect_rejected "more than one connector-unavailable scenario"
+  rm "$fixture/evaluations/regression/C1-extra.md"
+fi
+
 cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
 sed 's/^  id: .*/  id:/' "$fixture/agent.yaml.valid" > "$fixture/agent.yaml"
 expect_rejected "an empty agent.id"

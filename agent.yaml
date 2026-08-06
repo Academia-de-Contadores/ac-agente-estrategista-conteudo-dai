@@ -27,10 +27,18 @@ skills: []
 connectors: []
 evaluations:
   - evaluations/source-capture.md
-  - evaluations/scenarios/core.md
+  - evaluations/scenarios/T1.md
+  - evaluations/scenarios/T2.md
+  - evaluations/scenarios/T3.md
+  - evaluations/scenarios/T4.md
+  - evaluations/scenarios/T5.md
   - evaluations/rubrics/behavior.md
-  - evaluations/security/injection.md
-  - evaluations/regression/scope-and-handoff.md
+  - evaluations/security/S1.md
+  - evaluations/security/S2.md
+  - evaluations/security/S3.md
+  - evaluations/regression/H1.md
+  - evaluations/regression/H2.md
+  - evaluations/regression/H3.md
 profiles: []
 data_policy:
   allowed_classes:
