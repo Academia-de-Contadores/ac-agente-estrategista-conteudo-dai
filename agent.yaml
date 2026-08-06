@@ -1,11 +1,13 @@
 schema_version: 1
 agent:
-  id: ac.example-agent
-  name: Agente de Exemplo
+  id: ac.estrategista-conteudo-dai
+  name: Estrategista de Conteúdo D.A.I. Oficial
   version: 0.1.0
-  lifecycle: template
+  lifecycle: source-capture
   owners:
     - Academia-de-Contadores
+catalog:
+  url: https://github.com/Academia-de-Contadores/academia-contadores-agent-catalog
 objectives:
   mission: objectives/mission.md
   metrics: objectives/success-metrics.md
@@ -16,15 +18,11 @@ identity:
 instructions:
   system: instructions/system.md
   guardrails: instructions/guardrails.md
-skills:
-  - skills/example-skill/SKILL.md
-connectors:
-  - connectors/rag/contract.yaml
+skills: []
+connectors: []
 evaluations:
-  - skills/example-skill/evaluations/basic-scenario.md
-  - connectors/rag/evaluations/unavailable.md
-profiles:
-  - profiles/example-public-safe/profile.yaml
+  - evaluations/source-capture.md
+profiles: []
 data_policy:
   allowed_classes:
     - public
@@ -32,5 +30,4 @@ data_policy:
     - external_write
 distribution:
   canonical_branch: main
-  adapters:
-    - adapters/example-platform/adapter.yaml
+  adapters: []
