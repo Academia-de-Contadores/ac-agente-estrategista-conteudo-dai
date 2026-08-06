@@ -1,0 +1,2 @@
+base_url: https://example.invalid/rag
+token_from_environment: RAG_API_TOKEN

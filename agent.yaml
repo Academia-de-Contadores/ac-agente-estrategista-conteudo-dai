@@ -1,0 +1,36 @@
+schema_version: 1
+agent:
+  id: ac.example-agent
+  name: Agente de Exemplo
+  version: 0.1.0
+  lifecycle: template
+  owners:
+    - Academia-de-Contadores
+objectives:
+  mission: objectives/mission.md
+  metrics: objectives/success-metrics.md
+  non_goals: objectives/non-goals.md
+identity:
+  soul: identity/soul.md
+  definition: identity/identity.md
+instructions:
+  system: instructions/system.md
+  guardrails: instructions/guardrails.md
+skills:
+  - skills/example-skill/SKILL.md
+connectors:
+  - connectors/rag/contract.yaml
+evaluations:
+  - skills/example-skill/evaluations/basic-scenario.md
+  - connectors/rag/evaluations/unavailable.md
+profiles:
+  - profiles/example-public-safe/profile.yaml
+data_policy:
+  allowed_classes:
+    - public
+  human_approval_required_for:
+    - external_write
+distribution:
+  canonical_branch: main
+  adapters:
+    - adapters/example-platform/adapter.yaml

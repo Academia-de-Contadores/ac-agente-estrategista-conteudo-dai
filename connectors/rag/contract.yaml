@@ -1,0 +1,26 @@
+schema_version: 1
+connector:
+  id: example-rag
+  purpose: Recuperar trechos com evidências de uma base externa aprovada.
+  owner: Academia-de-Contadores
+  risk_class: read
+  data_classes:
+    - public
+  endpoint:
+    source: environment
+    variable: RAG_BASE_URL
+  authentication:
+    method: bearer
+    secret_variable: RAG_API_TOKEN
+  input:
+    query: string
+    max_results: integer
+  output:
+    passages: list
+    citations: list
+  fallback: Informar indisponibilidade e não fabricar resposta ou evidência.
+  limits:
+    - Somente leitura.
+    - Nenhum dado de cliente sem aprovação explícita da política de dados.
+  evaluation:
+    unavailable: evaluations/unavailable.md
