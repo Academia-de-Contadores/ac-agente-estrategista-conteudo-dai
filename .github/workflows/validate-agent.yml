@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   governance:
-    uses: Academia-de-Contadores/ac-ia-escritorio-contabil-curado/.github/workflows/reusable-validate-agent.yml@d6320d435e25340c600df5b641859b9e1f5ac686
+    uses: Academia-de-Contadores/ac-ia-escritorio-contabil-curado/.github/workflows/reusable-validate-agent.yml@41720c2751764f11ec8eb6a871a450143b5ec28f
     with:
-      governance_ref: d6320d435e25340c600df5b641859b9e1f5ac686
-
+      governance_ref: 41720c2751764f11ec8eb6a871a450143b5ec28f
