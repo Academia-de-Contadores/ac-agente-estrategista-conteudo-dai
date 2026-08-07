@@ -50,3 +50,10 @@ conversas de usuários, dados de clientes, logs, arquivos anexos, corpus, índic
 e qualquer duplicação específica da plataforma. A linha de instrução destinada ao
 campo “Instructions” do GPT Builder e títulos equivalentes foram removidos como
 wrapper de plataforma; o comportamento substantivo foi preservado.
+
+## Atualização — recuperação integral do Knowledge (2026-08-07)
+
+- Os 11 anexos exibidos no editor foram baixados diretamente e preservados em `knowledge/original/`.
+- `knowledge/MANIFEST.md` registra nome, tamanho e SHA-256 de cada arquivo.
+- Esta atualização substitui, para o estado atual do repositório, as observações históricas acima que diziam que os corpos dos anexos não haviam sido recuperados.
+- Tokens, credenciais, conversas de usuários, dados de clientes, logs e índices externos continuam fora do repositório.
