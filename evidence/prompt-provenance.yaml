@@ -1,0 +1,10 @@
+schema_version: '1.0'
+agent_id: estrategista-conteudo-dai
+path: prompt/instructions.md
+sha256: 6eb1967729fb871c8ecae3f0c92ebe7a4c98ca730fee6fb7009f0d148f665315
+vault_snapshot_path: agents/conteudo-dai/_curated/pinned-snapshots/2026-08-07/instructions.md
+prompt_manifest_path: agents/conteudo-dai/_curated/PROMPT-MANIFEST-2026-08-07.csv
+pinned_snapshot_source: 09_DCCEO_AGENTES/gpt-builder/pinned-2026-08-06/prompts/conteudo-dai.md
+snapshot_status: equal
+live_prompt_body_status: pending_no_live_prompt_hash_or_public_byte_equivalence
+external_configuration: not_verified

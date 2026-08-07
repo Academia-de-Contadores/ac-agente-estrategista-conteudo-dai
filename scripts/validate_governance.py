@@ -195,7 +195,20 @@ def validate_agent_repository(root: Path) -> None:
         reject("INVALID_PROMPT_PATH", repr(prompt_path))
     prompt = root / prompt_path
     require_file(prompt, "PROMPT_MISSING")
-    validate_text_content(prompt, PurePosixPath(prompt_path), allowed_extensions)
+    prompt_content = validate_text_content(prompt, PurePosixPath(prompt_path), allowed_extensions)
+    prompt_provenance_path = root / "evidence" / "prompt-provenance.yaml"
+    if prompt_provenance_path.exists():
+        prompt_provenance = load_document(prompt_provenance_path)
+        if prompt_provenance.get("agent_id") != agent_id:
+            reject("PROMPT_PROVENANCE_AGENT_MISMATCH", str(prompt_provenance_path))
+        if prompt_provenance.get("path") != prompt_path:
+            reject("PROMPT_PROVENANCE_PATH_MISMATCH", str(prompt_provenance_path))
+        if prompt_provenance.get("snapshot_status") != agent.get("prompt_comparison", {}).get("status"):
+            reject("PROMPT_PROVENANCE_STATUS_MISMATCH", str(prompt_provenance_path))
+        if prompt_provenance.get("external_configuration") != "not_verified":
+            reject("PROMPT_EXTERNAL_STATE_PROMOTED", str(prompt_provenance_path))
+        if prompt_provenance.get("sha256") != hashlib.sha256(prompt_content).hexdigest():
+            reject("PROMPT_HASH_MISMATCH", prompt_path)
 
     if manifest.get("agent_id") != agent_id:
         reject("MANIFEST_AGENT_MISMATCH", repr(manifest.get("agent_id")))
