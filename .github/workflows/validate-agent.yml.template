@@ -1,0 +1,15 @@
+name: Validate governed agent package
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  governance:
+    uses: Academia-de-Contadores/ac-ia-escritorio-contabil-curado/.github/workflows/reusable-validate-agent.yml@__GOVERNANCE_REF__
+    with:
+      governance_ref: __GOVERNANCE_REF__

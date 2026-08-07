@@ -1,0 +1,5 @@
+schema_version: '1.0'
+configured_external: not_verified
+fingerprint_pass: not_verified
+e2e_pass: not_verified
+published: not_verified

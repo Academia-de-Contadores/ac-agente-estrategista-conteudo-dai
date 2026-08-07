@@ -1,0 +1,7 @@
+schema_version: "1.0"
+mode: explicit_allowlist_only
+source_read_only: true
+automatic_deletion: false
+allowed_extensions: [.csv, .json, .md, .txt, .yaml, .yml]
+allowed_targets: [prompt/, knowledge/source/, knowledge/upload/, contracts/, guardrails/, evals/, evidence/, processes/, release/]
+required_flow: [vault_read_only, external_staging, validation, pull_request, human_approval]

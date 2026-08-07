@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://academia-de-contadores.local/schemas/agent.schema.json",
+  "title": "Curated agent identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "repository", "public_name", "aliases", "owner", "prompt_path", "prompt_comparison"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "repository": {"type": "string", "pattern": "^ac-agente-[a-z0-9]+(?:-[a-z0-9]+)*$"},
+    "public_name": {"type": "string", "minLength": 1},
+    "aliases": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"}},
+    "owner": {"type": "string", "pattern": "^@[A-Za-z0-9-]+$"},
+    "prompt_path": {"type": "string", "pattern": "^prompt/[^/]+\\.md$"},
+    "prompt_comparison": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {"status": {"enum": ["equal", "different", "not_available", "pending_human_review"]}}
+    }
+  }
+}

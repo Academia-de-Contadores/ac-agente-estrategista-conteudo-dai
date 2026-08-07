@@ -1,0 +1,18 @@
+schema_version: "1.0"
+applies_to: all-nine-pinned-agents
+manual_approval_required: true
+sensitive_data:
+  secrets_allowed: false
+  pii_allowed: false
+knowledge:
+  max_upload_files: 20
+  prompt_separate: true
+  sha256_required: true
+  forbidden_extensions: [.7z, .bin, .doc, .docx, .exe, .pdf, .ppt, .pptx, .rar, .xls, .xlsx, .zip]
+  forbidden_path_parts: [.git, .obsidian]
+  symlinks_allowed: false
+external_states:
+  configured_external: not_verified
+  fingerprint_pass: not_verified
+  e2e_pass: not_verified
+  published: not_verified

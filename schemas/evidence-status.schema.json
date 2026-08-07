@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://academia-de-contadores.local/schemas/evidence-status.schema.json",
+  "title": "External verification status",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "configured_external", "fingerprint_pass", "e2e_pass", "published"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "configured_external": {"const": "not_verified"},
+    "fingerprint_pass": {"const": "not_verified"},
+    "e2e_pass": {"const": "not_verified"},
+    "published": {"const": "not_verified"}
+  }
+}

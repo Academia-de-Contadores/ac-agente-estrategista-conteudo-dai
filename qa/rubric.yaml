@@ -1,0 +1,6 @@
+schema_version: '1.0'
+required:
+- manifest_valid
+- hashes_valid
+- upload_limit_valid
+- external_states_not_verified

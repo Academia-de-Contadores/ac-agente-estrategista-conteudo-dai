@@ -1,50 +1,10 @@
-schema_version: 1
-agent:
-  id: ac.estrategista-conteudo-dai
-  name: Estrategista de Conteúdo D.A.I. Oficial
-  version: 0.1.0
-  lifecycle: source-capture
-  owners:
-    - Academia-de-Contadores
-catalog:
-  url: https://github.com/Academia-de-Contadores/academia-contadores-agent-catalog
-source_capture:
-  status: accessible
-  captured_at: 2026-08-06
-  source_url: https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
-  record: evaluations/source-capture.md
-objectives:
-  mission: objectives/mission.md
-  metrics: objectives/success-metrics.md
-  non_goals: objectives/non-goals.md
-identity:
-  soul: identity/soul.md
-  definition: identity/identity.md
-instructions:
-  system: instructions/system.md
-  guardrails: instructions/guardrails.md
-skills: []
-connectors: []
-evaluations:
-  - evaluations/source-capture.md
-  - evaluations/scenarios/T1.md
-  - evaluations/scenarios/T2.md
-  - evaluations/scenarios/T3.md
-  - evaluations/scenarios/T4.md
-  - evaluations/scenarios/T5.md
-  - evaluations/rubrics/behavior.md
-  - evaluations/security/S1.md
-  - evaluations/security/S2.md
-  - evaluations/security/S3.md
-  - evaluations/regression/H1.md
-  - evaluations/regression/H2.md
-  - evaluations/regression/H3.md
-profiles: []
-data_policy:
-  allowed_classes:
-    - public
-  human_approval_required_for:
-    - external_write
-distribution:
-  canonical_branch: main
-  adapters: []
+schema_version: '1.0'
+id: estrategista-conteudo-dai
+repository: ac-agente-estrategista-conteudo-dai
+public_name: Agente Estrategista de Conteúdo D.A.I. | Oficial
+aliases:
+- conteudo-dai
+owner: '@G09c'
+prompt_path: prompt/instructions.md
+prompt_comparison:
+  status: equal

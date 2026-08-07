@@ -1,11 +1,17 @@
-name: Validate agent repository
+name: Validate governed Knowledge Pack
 on:
   pull_request:
   push:
     branches: [main]
+permissions:
+  contents: read
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - run: bash scripts/validate-agent-repo.sh
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: "3.12"
+      - run: python -m pip install -r requirements-validator.txt
+      - run: bash tests/validate-agent-repo.test.sh
