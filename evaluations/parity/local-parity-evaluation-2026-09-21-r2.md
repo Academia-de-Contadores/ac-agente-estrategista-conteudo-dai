@@ -9,8 +9,10 @@ autenticados formam o mesmo contrato. O score local permanece **72/72**, com
 **6/6 casos qualificados**.
 
 O finding anterior `F-BLOCKER-001` está **RESOLVIDO**. Não há finding C/I/M
-aberto. A candidata está apta à etapa seguinte segundo esta rubrica; esta
-avaliação não altera automaticamente o lifecycle nem publica uma release.
+aberto. No momento desta R2, a skill ainda estava no estado histórico
+`candidate` e apta à etapa seguinte segundo a rubrica; esta avaliação não
+alterou automaticamente o lifecycle nem publicou uma release. A promoção
+ocorreu posteriormente no commit `bf3564e`.
 
 ## O que foi revalidado
 
@@ -169,8 +171,9 @@ textual, mas não invalida a cadeia de fingerprints e resultados registrada.
 - **Comportamento local:** PASS, 72/72.
 - **Gates:** PASS, 36/36.
 - **Finding de deriva:** resolvido.
-- **Elegibilidade:** apta à próxima etapa de decisão; nenhuma promoção ou release
-  foi executada por esta avaliação.
+- **Elegibilidade na R2:** a skill, então no estado histórico `candidate`, estava
+  apta à próxima etapa de decisão; nenhuma promoção ou release foi executada por
+  esta avaliação. A promoção ocorreu posteriormente em `bf3564e`.
 
 A matriz
 `evaluations/parity/local-parity-evaluation-2026-09-21-r2.yaml` contém a

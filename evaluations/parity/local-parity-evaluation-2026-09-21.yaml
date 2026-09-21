@@ -3,7 +3,12 @@ evaluation_id: local-parity-2026-09-21
 evaluated_at: "2026-09-21"
 evaluator: independent_codex_reviewer
 candidate_commit: 5e366596fa75b0b4d352e10606c4aaa6e502b4fb
-installed_skill: /Users/levy/.codex/skills/ac-estrategista-conteudo-dai
+installed_skill: "$CODEX_HOME/skills/ac-estrategista-conteudo-dai"
+lifecycle_context:
+  state_at_evaluation: candidate
+  historical_state: true
+  promoted_after_evaluation: true
+  promotion_commit: bf3564e
 rubric: evaluations/rubrics/behavior.md
 online_baseline:
   report: reports/online-parity-2026-09-21.md

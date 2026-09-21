@@ -4,6 +4,11 @@ evaluated_at: "2026-09-21"
 evaluator: independent_codex_reviewer
 evaluated_commit: 54eb7bfc81125e38eed4cabcb18c4a8c2577e038
 correction_commit: 54eb7bfc81125e38eed4cabcb18c4a8c2577e038
+lifecycle_context:
+  state_at_evaluation: candidate
+  historical_state: true
+  promoted_after_evaluation: true
+  promotion_commit: bf3564e
 previous_evaluation:
   artifact: evaluations/parity/local-parity-evaluation-2026-09-21.yaml
   commit: b2ba3a1378af03dce9225d4c0247d094ffacafde

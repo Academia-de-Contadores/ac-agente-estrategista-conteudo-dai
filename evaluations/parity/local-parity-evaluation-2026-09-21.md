@@ -14,14 +14,18 @@ exatamente os bytes e SHA-256 registrados em
 `reports/online-parity-2026-09-21.md`; a suíte versionada antiga não reproduz
 nenhum dos seis fingerprints.
 
-Este é um bloqueio de contrato de avaliação, não uma reprovação de comportamento
-da candidata.
+Este era um bloqueio de contrato de avaliação, não uma reprovação de
+comportamento da skill no estado histórico `candidate` do commit avaliado. O
+lifecycle foi promovido posteriormente pelo commit
+`bf3564e`.
 
 ## Escopo e método
 
 - Commit avaliado: `5e366596fa75b0b4d352e10606c4aaa6e502b4fb`.
 - Skill instalada inspecionada:
-  `/Users/levy/.codex/skills/ac-estrategista-conteudo-dai`.
+  `$CODEX_HOME/skills/ac-estrategista-conteudo-dai`.
+- Contexto de lifecycle: estado histórico `candidate` no momento desta R1;
+  promoção posterior registrada em `bf3564e`.
 - Rubrica: `evaluations/rubrics/behavior.md`, seis dimensões de 0–2 e seis gates.
 - Contrato de cada caso: prompt literal cujo tamanho e SHA-256 coincidem com o
   fingerprint autenticado do relatório online.
@@ -219,12 +223,13 @@ Nenhum finding comportamental nessas severidades.
 
 ## Veredito final
 
-- **Candidata local contra prompts autenticados:** QUALIFICADA, 72/72 e 36/36
-  gates PASS.
+- **Skill no estado histórico `candidate` contra prompts autenticados:**
+  QUALIFICADA, 72/72 e 36/36 gates PASS. Esse lifecycle foi promovido
+  posteriormente em `bf3564e`.
 - **Equivalência comportamental com o baseline registrado:** PASS no nível de
   contrato, score e gates; equivalência textual não avaliada.
-- **Promoção de lifecycle/release:** **BLOQUEADA** até corrigir a deriva entre os
-  prompts autenticados e a suíte versionada.
+- **Promoção de lifecycle/release no momento da R1:** **BLOQUEADA** até corrigir
+  a deriva entre os prompts autenticados e a suíte versionada.
 
 A matriz legível por máquina em
 `evaluations/parity/local-parity-evaluation-2026-09-21.yaml` contém os 72
