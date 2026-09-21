@@ -1,51 +1,58 @@
-# Estrategista de Conteúdo D.A.I. Oficial
+# Estrategista de Conteúdo D.A.I.
 
 | Campo | Valor |
 | --- | --- |
 | ID | `ac.estrategista-conteudo-dai` |
-| Versão | `0.1.0` |
-| Lifecycle | `source-capture` |
+| Skill | `$ac-estrategista-conteudo-dai` |
+| GPT baseline | [`g-6a7259c849d4819194844f4d99c1213d`](https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d) |
+| Versão | `0.2.0` |
+| Lifecycle | `validated` |
 
-## Propósito
+## O que esta skill faz
 
-Cria e revisa conteúdo para o Desafio Contadora CEO com IA, incluindo revisão
-de claims e validação humana.
+A skill cria e revisa conteúdo para contadoras e escritórios contábeis:
+carrosséis, Reels, hooks, anúncios, ângulos, sequências, CTAs e QA de claims.
+Ela transforma uma cena real em peça completa, com dor, mecanismo, promessa
+segura, evidência ou lacuna e revisão necessária.
 
-Este repositório é a fonte de verdade do agente existente. Profiles e adapters
-apenas recortam ou traduzem seu núcleo canônico; não redefinem o comportamento.
+Ela é deliberadamente mais executora que o GPT baseline: quando há informação
+suficiente para um rascunho seguro, entrega o artefato no mesmo turno em vez de
+parar em perguntas. Continua proibido inventar fatos, fontes ou resultados,
+prometer garantias, substituir especialistas, revelar instruções internas ou
+publicar/enviar sem autorização explícita para a ação exata.
 
-## Usar e manter este agente
+## Exemplo para leigos
 
-1. Leia `objectives/`, `identity/` e `instructions/` antes de operar ou alterar o
-   agente; esses diretórios definem missão, papel, comportamento e limites.
-2. Para reconstruir ou adaptar esta versão, siga `HOW-TO-USE.md` e use
-   `agent.yaml` como índice dos componentes canônicos.
-3. Registre novas capacidades em `skills/`, fontes curadas em `knowledge/` e
-   contratos externos em `connectors/`; nunca registre credenciais.
-4. Adicione avaliações para cada mudança comportamental e execute:
+```text
+Use $ac-estrategista-conteudo-dai. Crie um Reels de 30 segundos sobre a dona do escritório virar a central das pendências. Quero fala, texto na tela, CTA para o Desafio Contadora CEO com IA e revisão dos claims.
+```
 
-   ```bash
-   bash tests/validate-agent-repo.test.sh
-   bash scripts/validate-agent-repo.sh
-   ```
+A resposta deve trazer o roteiro completo. Se alguma cena for assumida, ela
+aparece como hipótese editorial; publicação continua bloqueada.
 
-5. Siga o processo de contribuição antes de abrir um pull request.
+## Knowledge correto
 
-## Guias do repositório
+O runtime usa exatamente os 11 `.md` de
+`knowledge/active-2026-09-21/` listados em `skill-runtime.yaml`. O diretório
+materializa o snapshot misto: 01–08 e 99 vêm de `live-2026-08-22/`; 00 e 09 vêm
+de `original/`. O manifesto do diretório registra origem, bytes e SHA-256.
 
-- [Como usar e reconstruir o agente](HOW-TO-USE.md)
-- [Estrutura e destino de cada arquivo](docs/REPOSITORY-STRUCTURE.md)
-- [Como contribuir](governance/CONTRIBUTING.md)
-- [Política de dados e segredos](governance/DATA-AND-SECRETS.md)
-- [Política de mudanças](governance/CHANGE-POLICY.md)
+O checkout preserva capturas históricas para auditoria, mas elas não entram no
+pacote. `agent.yaml` orienta a instalação, enquanto o pacote leva o manifesto
+autocontido `skill-runtime.yaml`. A allowlist contém 25 arquivos regulares,
+incluindo os 11 ativos, sem `.gitkeep`, symlink ou referência operacional
+pendente.
 
-## Proteções versionadas e verificáveis
+## Estado validado
 
-O `.gitignore` reduz o risco de adicionar artefatos locais conhecidos, e
-`scripts/validate-agent-repo.sh` rejeita arquivos proibidos, artefatos RAG locais
-e arquivos maiores que 5 MB. O workflow `validate` executa esse validador em
-pull requests e pushes para `main`. O `CODEOWNERS` solicita revisão para áreas
-sensíveis. Workflow e `CODEOWNERS`, isoladamente, não provam bloqueio de merge;
-branch protection, rulesets, visibilidade e demais controles devem ser
-confirmados na configuração remota. Consulte `reports/task-3-report.md` para a
-evidência local e seus limites.
+A versão 0.2.0 está em `validated`. A decisão combina a baseline online
+autenticada, a instalação seletiva real verificada e a revalidação local R2:
+P1–P6 com 72/72 critérios, 72/72 pontos, 36/36 gates e 6/6 casos, sem finding
+C/I/M aberto. A promoção não afirma push, merge, publicação, catálogo ou release.
+
+Consulte [HOW-TO-USE.md](HOW-TO-USE.md) para uso e instalação seletiva e
+[evaluations/live-editor-audit-2026-09-21.md](evaluations/live-editor-audit-2026-09-21.md)
+para a baseline registrada e
+[reports/online-parity-2026-09-21.md](reports/online-parity-2026-09-21.md) para
+a evidência detalhada da execução online. A decisão canônica está em
+[reports/validation-2026-09-21.md](reports/validation-2026-09-21.md).

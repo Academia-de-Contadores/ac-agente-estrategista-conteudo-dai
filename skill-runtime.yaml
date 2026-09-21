@@ -1,0 +1,64 @@
+schema_version: 1
+name: ac-estrategista-conteudo-dai
+version: 0.2.0
+lifecycle: validated
+entrypoint: SKILL.md
+interface: agents/openai.yaml
+triggers:
+  - conteúdo contábil
+  - hook
+  - carrossel
+  - Reels
+  - anúncio
+  - copy
+  - roteiro
+  - CTA
+  - QA de claims
+  - Reforma e IA
+  - Desafio Contadora CEO com IA
+references:
+  evidence_policy: references/evidence-policy.md
+  content_outputs: references/content-outputs.md
+  approval_policy: references/approval-policy.md
+instructions:
+  - instructions/system.md
+  - instructions/guardrails.md
+  - instructions/workflows/main.md
+knowledge:
+  - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+  - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+  - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+  - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+  - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+  - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+  - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+  - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+  - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+  - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+  - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
+package:
+  - SKILL.md
+  - skill-runtime.yaml
+  - agents/openai.yaml
+  - references/evidence-policy.md
+  - references/content-outputs.md
+  - references/approval-policy.md
+  - identity/identity.md
+  - identity/soul.md
+  - objectives/mission.md
+  - objectives/non-goals.md
+  - objectives/success-metrics.md
+  - instructions/system.md
+  - instructions/guardrails.md
+  - instructions/workflows/main.md
+  - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+  - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+  - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+  - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+  - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+  - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+  - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+  - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+  - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+  - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+  - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md

@@ -2,17 +2,28 @@ schema_version: 1
 agent:
   id: ac.estrategista-conteudo-dai
   name: Estrategista de Conteúdo D.A.I. Oficial
-  version: 0.1.0
-  lifecycle: source-capture
+  version: 0.2.0
+  lifecycle: validated
   owners:
     - Academia-de-Contadores
 catalog:
   url: https://github.com/Academia-de-Contadores/academia-contadores-agent-catalog
 source_capture:
   status: accessible
-  captured_at: 2026-08-22
+  captured_at: 2026-08-06
+  last_verified_at: 2026-09-21
+  knowledge_binary_captured_at: 2026-08-22
   source_url: https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
-  record: knowledge/live-2026-08-22/MANIFEST.md
+  record: evaluations/source-capture.md
+  current_audit: evaluations/live-editor-audit-2026-09-21.md
+  online_parity_report: reports/online-parity-2026-09-21.md
+  recommended_model_label: Thinking 5.6
+  preview_model_label: GPT-5.6 Sol
+  capabilities:
+    web: true
+    image_generation: true
+    code_interpreter: false
+    actions_configured: false
 objectives:
   mission: objectives/mission.md
   metrics: objectives/success-metrics.md
@@ -23,10 +34,85 @@ identity:
 instructions:
   system: instructions/system.md
   guardrails: instructions/guardrails.md
-skills: []
+skills:
+  - id: ac-estrategista-conteudo-dai
+    entrypoint: SKILL.md
+    interface: agents/openai.yaml
+    references:
+      - references/evidence-policy.md
+      - references/content-outputs.md
+      - references/approval-policy.md
+skill_runtime:
+  name: ac-estrategista-conteudo-dai
+  version: 0.2.0
+  lifecycle: validated
+  manifest: skill-runtime.yaml
+  entrypoint: SKILL.md
+  interface: agents/openai.yaml
+  triggers:
+    - conteúdo contábil
+    - hook
+    - carrossel
+    - Reels
+    - anúncio
+    - copy
+    - roteiro
+    - CTA
+    - QA de claims
+    - Reforma e IA
+    - Desafio Contadora CEO com IA
+  evidence_policy: references/evidence-policy.md
+  content_outputs: references/content-outputs.md
+  approval_policy: references/approval-policy.md
+  knowledge:
+    - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+    - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+    - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+    - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+    - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+    - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+    - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+    - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+    - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+    - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+    - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
+  package:
+    - SKILL.md
+    - skill-runtime.yaml
+    - agents/openai.yaml
+    - references/evidence-policy.md
+    - references/content-outputs.md
+    - references/approval-policy.md
+    - identity/identity.md
+    - identity/soul.md
+    - objectives/mission.md
+    - objectives/non-goals.md
+    - objectives/success-metrics.md
+    - instructions/system.md
+    - instructions/guardrails.md
+    - instructions/workflows/main.md
+    - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+    - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+    - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+    - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+    - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+    - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+    - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+    - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+    - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+    - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+    - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
 connectors: []
 evaluations:
   - evaluations/source-capture.md
+  - evaluations/live-editor-audit-2026-09-21.md
+  - evaluations/parity/questions.yaml
+  - evaluations/parity/P1.md
+  - evaluations/parity/P2.md
+  - evaluations/parity/P3.md
+  - evaluations/parity/P4.md
+  - evaluations/parity/P5.md
+  - evaluations/parity/P6.md
   - evaluations/scenarios/T1.md
   - evaluations/scenarios/T2.md
   - evaluations/scenarios/T3.md
@@ -39,7 +125,47 @@ evaluations:
   - evaluations/regression/H1.md
   - evaluations/regression/H2.md
   - evaluations/regression/H3.md
+  - evaluations/parity/local-parity-evaluation-2026-09-21.md
+  - evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
 profiles: []
+validation:
+  status: validated
+  decided_at: 2026-09-21
+  report: reports/validation-2026-09-21.md
+  evidence:
+    corrective_review_commit: d324bc9296b0a6e093c881d9d6acdf44c4512526
+    forward_local_commit: 5e366596fa75b0b4d352e10606c4aaa6e502b4fb
+    contract_correction_commit: 54eb7bfc81125e38eed4cabcb18c4a8c2577e038
+    final_revalidation_commit: 5be973f532474ead58592a7889bbf58903d54486
+    online_report: reports/online-parity-2026-09-21.md
+    local_r1_report: evaluations/parity/local-parity-evaluation-2026-09-21.md
+    local_r2_report: evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
+  selective_installation_before_promotion:
+    verified_at: 2026-09-21
+    files: 25
+    knowledge_files: 11
+    symlinks: 0
+    gitkeep_files: 0
+    aggregate_sha256: 68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140
+    byte_equal_to_source_package: true
+  selective_installation_after_promotion:
+    reinstalled_at: 2026-09-21
+    logical_path: $CODEX_HOME/skills/ac-estrategista-conteudo-dai
+    files: 25
+    knowledge_files: 11
+    symlinks: 0
+    gitkeep_files: 0
+    aggregate_sha256: 45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30
+    byte_equal_to_source_package: true
+    quick_validate: PASS
+    content_validator: PASS
+  package_after_promotion:
+    changed_packaged_files:
+      - skill-runtime.yaml
+      - objectives/success-metrics.md
+    simulated_aggregate_sha256: 45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30
+    reinstalled_at: 2026-09-21
+    reinstall_required: false
 data_policy:
   allowed_classes:
     - public

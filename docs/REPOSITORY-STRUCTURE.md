@@ -8,11 +8,15 @@ controlada dele.
 
 ```text
 .
+├── SKILL.md                    # entrada operacional distribuível
 ├── agent.yaml
+├── skill-runtime.yaml          # manifesto autocontido do pacote instalado
+├── agents/                     # metadados de interface e invocação
+├── references/                 # contratos consultados sob demanda pela skill
 ├── objectives/                 # missão, métricas e não-objetivos
 ├── identity/                   # papel, autoridade, voz e valores
 ├── instructions/               # prompt, guardrails e workflows permanentes
-├── skills/                     # procedimentos acionáveis e suas avaliações
+├── skills/                     # reservado para capabilities internas futuras
 ├── knowledge/                  # fontes curadas disponíveis ao modelo
 ├── connectors/                 # contratos de sistemas externos, Actions e RAG
 ├── adapters/                   # tradução do núcleo para cada plataforma
@@ -55,6 +59,10 @@ use-a somente com manifesto de tipo, alvo, finalidade e dependência.
 - **Não entra:** prompt completo, personalidade, conteúdo de Knowledge, credencial, dado de cliente ou referência para arquivo inexistente.
 - **Exemplo:** `agent.version: 0.2.0` acompanhado das avaliações e dos `canonical_agent_version` correspondentes em profiles e adapters.
 - **Avaliação ou revisão:** toda mudança exige validação do manifesto; ID, lifecycle, versão, permissões, componentes ou caminhos requerem revisão do owner e avaliações proporcionais ao impacto.
+
+`agent.yaml` é a fonte da instalação no repositório. `skill-runtime.yaml` entra
+no pacote e repete somente os caminhos empacotados; o validador exige igualdade
+entre as allowlists e rejeita referência operacional para arquivo ausente.
 
 ## Arquivos ignorados
 
@@ -106,10 +114,12 @@ use-a somente com manifesto de tipo, alvo, finalidade e dependência.
 
 ## Skills
 
-- **O que é:** `skills/` reúne procedimentos reutilizáveis e acionáveis.
-- **Entra:** `skills/<nome>/SKILL.md` e `skills/<nome>/evaluations/`.
+- **O que é:** `SKILL.md` é a entrada operacional desta distribuição;
+  `references/` guarda contratos carregados sob demanda e `agents/openai.yaml`
+  define a interface. `skills/` fica reservado a capabilities internas futuras.
+- **Entra:** `SKILL.md`, referências necessárias e avaliações em `evaluations/`.
 - **Não entra:** regra de toda resposta, dado bruto ou credencial.
-- **Exemplo:** `skills/example-skill/SKILL.md` para estruturar briefing.
+- **Exemplo:** `SKILL.md` roteia para `references/content-outputs.md`.
 - **Avaliação ou revisão:** cada mudança requer cenário direcionado e regressão aplicável.
 
 ## Knowledge
@@ -117,7 +127,7 @@ use-a somente com manifesto de tipo, alvo, finalidade e dependência.
 - **O que é:** `knowledge/` é a base curada que pode ser fornecida ao modelo.
 - **Entra:** `.md`, `.txt`, `.pdf`, `.csv`, JSON de referência, imagens, planilhas e manifesto de fonte/data/licença/hash.
 - **Não entra:** manual de manutenção, segredo, dado de cliente, conversa, log, corpus ou índice vetorial.
-- **Exemplo:** PDF de legislação com manifesto de proveniência.
+- **Exemplo:** `knowledge/active-2026-09-21/` materializa os 11 anexos da allowlist.
 - **Avaliação ou revisão:** avalie respostas e segurança; revise licença, classe de dados e tamanho.
 
 ## Connectors
