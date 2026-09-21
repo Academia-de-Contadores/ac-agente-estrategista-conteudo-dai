@@ -62,23 +62,18 @@ if grep -Eq 'delete_suffix|chomp|rstrip|strip' "$validator"; then
   echo "instruction parity must not normalize instructions/system.md" >&2
   exit 1
 fi
-personal_home="$(printf '/%s/%s/' Users levy)"
 ruby -e '
-  root, needle = ARGV
-  allowed = %w[
-    evaluations/parity/local-parity-evaluation-2026-09-21.md
-    evaluations/parity/local-parity-evaluation-2026-09-21.yaml
-    evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
-    evaluations/parity/local-parity-evaluation-2026-09-21-r2.yaml
-  ]
+  root = ARGV.fetch(0)
+  pattern = Regexp.new(Regexp.escape("/" + "Users" + "/") + "[^/\\s]+/")
   offenders = Dir.glob(File.join(root, "**/*"), File::FNM_DOTMATCH).select do |path|
     next false unless File.file?(path)
     relative = path.delete_prefix(root + "/")
-    next false if relative.split("/").include?(".git") || allowed.include?(relative)
-    File.binread(path).include?(needle)
+    next false if relative.split("/").include?(".git")
+    contents = File.binread(path).force_encoding(Encoding::UTF_8)
+    contents.valid_encoding? && contents.match?(pattern)
   end
   abort "repository contains a personal absolute path: #{offenders.join(", ")}" unless offenders.empty?
-' "$root" "$personal_home"
+' "$root"
 
 fixture="$(mktemp -d)"
 trap 'rm -rf "$fixture"' EXIT
@@ -92,6 +87,15 @@ expect_rejected() {
     return 1
   fi
 }
+
+cp "$fixture/evaluations/parity/local-parity-evaluation-2026-09-21.md" \
+  "$fixture/local-r1-report.md.valid"
+personal_fixture_path="$(printf '/%s/%s/%s' Users alguem segredo)"
+printf '\nCaminho indevido: `%s`.\n' "$personal_fixture_path" >> \
+  "$fixture/evaluations/parity/local-parity-evaluation-2026-09-21.md"
+expect_rejected "personal home path in R1 parity report"
+mv "$fixture/local-r1-report.md.valid" \
+  "$fixture/evaluations/parity/local-parity-evaluation-2026-09-21.md"
 
 cp "$fixture/evaluations/parity/questions.yaml" "$fixture/questions.yaml.valid"
 ruby -pi -e 'sub("Somos um escritório", "Somos outro escritório")' \

@@ -259,18 +259,11 @@ required_evaluations.each do |relative_path|
 end
 
 personal_home_pattern = Regexp.new(Regexp.escape("/" + "Users" + "/") + "[^/\\s]+/")
-historical_personal_path_artifacts = %w[
-  evaluations/parity/local-parity-evaluation-2026-09-21.md
-  evaluations/parity/local-parity-evaluation-2026-09-21.yaml
-  evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
-  evaluations/parity/local-parity-evaluation-2026-09-21-r2.yaml
-].freeze
 Dir.glob(ROOT.join("**/*"), File::FNM_DOTMATCH).each do |path_string|
   path = Pathname.new(path_string)
   relative_path = path.relative_path_from(ROOT).to_s
   next unless path.file?
   next if relative_path.split("/").include?(".git")
-  next if historical_personal_path_artifacts.include?(relative_path)
 
   contents = path.binread.force_encoding(Encoding::UTF_8)
   next unless contents.valid_encoding?
