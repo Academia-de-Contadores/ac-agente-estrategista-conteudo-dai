@@ -3,14 +3,19 @@ set -euo pipefail
 
 root="$(cd "$(dirname "$0")/.." && pwd)"
 validator="$root/scripts/validate-agent-repo.sh"
+agent_version="$(awk '/^  version:[[:space:]]*/ { print $2; exit }' "$root/agent.yaml")"
 
 for f in README.md HOW-TO-USE.md docs/REPOSITORY-STRUCTURE.md agent.yaml objectives/mission.md objectives/success-metrics.md \
   objectives/non-goals.md identity/soul.md identity/identity.md instructions/system.md \
-  instructions/guardrails.md governance/CONTRIBUTING.md governance/CHANGE-POLICY.md \
+  instructions/guardrails.md instructions/workflows/main.md \
+  SKILL.md agents/openai.yaml references/evidence-policy.md \
+  references/content-outputs.md references/approval-policy.md \
+  evaluations/parity/questions.yaml \
+  governance/CONTRIBUTING.md governance/CHANGE-POLICY.md \
   governance/RELEASE-POLICY.md governance/DATA-AND-SECRETS.md \
   governance/RISK-REGISTER.md \
   .github/CODEOWNERS .github/PULL_REQUEST_TEMPLATE.md .github/workflows/validate.yml \
-  scripts/validate-agent-repo.sh; do
+  scripts/validate-agent-repo.sh scripts/validate-content-skill.rb; do
   test -f "$root/$f"
 done
 
@@ -32,12 +37,12 @@ mkdir -p "$fixture/profiles/validation-fixture" \
 printf '%s\n' \
   'schema_version: 1' \
   'name: validation-fixture' \
-  'canonical_agent_version: 0.1.0' \
+  "canonical_agent_version: $agent_version" \
   > "$fixture/profiles/validation-fixture/profile.yaml"
 printf '%s\n' \
   'schema_version: 1' \
   'name: validation-fixture' \
-  'canonical_agent_version: 0.1.0' \
+  "canonical_agent_version: $agent_version" \
   'target: validation-fixture' \
   > "$fixture/adapters/validation-fixture/adapter.yaml"
 
@@ -190,3 +195,4 @@ expect_rejected "an adapter without canonical_agent_version"
 mv "$fixture/adapter.yaml.valid" "$fixture/adapters/validation-fixture/adapter.yaml"
 
 echo "validate-agent-repo tests passed"
+bash "$root/tests/validate-content-skill.test.sh"

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Conteúdo D.A.I."
+  short_description: "Conteúdo contábil útil, seguro e pronto para revisão"
+  default_prompt: "Use $ac-estrategista-conteudo-dai para transformar esta ideia em uma peça completa, com evidência ou lacuna, QA de claims, CTA e revisão necessária."
+policy:
+  allow_implicit_invocation: true

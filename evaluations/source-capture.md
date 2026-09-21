@@ -1,5 +1,24 @@
 # Ficha de captura da fonte
 
+## Estado reconfirmado em 2026-09-21
+
+- Auditoria corrente: `evaluations/live-editor-audit-2026-09-21.md`.
+- Nome online: `Agente Estrategista de Conteúdo D.A.I. | Oficial (copy)`;
+  status `Rascunho`.
+- Instruções online: 3.989 bytes, 133 linhas e SHA-256
+  `913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247`;
+  paridade byte a byte com o payload de `instructions/system.md` após remover
+  o wrapper documental de dez linhas e a quebra final local.
+- Knowledge: 11 nomes reconfirmados; conjunto binário ativo materializado em
+  `knowledge/active-2026-09-21/` a partir do snapshot misto de 2026-08-22.
+- Modelo: `Thinking 5.6` no seletor e `GPT-5.6 Sol` no preview.
+- Recursos: web e geração de imagens ativadas; Code Interpreter desativado;
+  nenhuma Action configurada.
+- Seis ensaios online do baseline passaram, sem mutação ou publicação. Isso não
+  declara a candidata local como validada.
+
+## Registro histórico — 2026-08-06
+
 - **source_status:** accessible
 - **data da captura:** 2026-08-06
 - **URL exata do editor/fonte:** https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
@@ -13,7 +32,8 @@
 
 - **Descrição:** Agente Estrategista de Conteúdo D.A.I. do Desafio Contadora CEO com IA, com criação, revisão de claims e validação humana.
 - **Quebra-gelos:** `Me ajude a gerar um carrossel`; `Transforme essa dúvida em um conteúdo `; `Crie um roteiro de reels pra captar clientes`.
-- **Modelo recomendado:** Nenhum modelo recomendado, os usuários usarão qualquer modelo que preferirem.
+- **Modelo recomendado:** Nenhum modelo recomendado foi observado naquela
+  captura. O estado visual reconfirmado acima substitui esta observação histórica.
 - **Busca na web:** ativada.
 - **Geração de imagens:** ativada.
 - **Intérprete de código/análise de dados:** desativado.

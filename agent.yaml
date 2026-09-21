@@ -2,17 +2,27 @@ schema_version: 1
 agent:
   id: ac.estrategista-conteudo-dai
   name: Estrategista de Conteúdo D.A.I. Oficial
-  version: 0.1.0
-  lifecycle: source-capture
+  version: 0.2.0
+  lifecycle: candidate
   owners:
     - Academia-de-Contadores
 catalog:
   url: https://github.com/Academia-de-Contadores/academia-contadores-agent-catalog
 source_capture:
   status: accessible
-  captured_at: 2026-08-22
+  captured_at: 2026-08-06
+  last_verified_at: 2026-09-21
+  knowledge_binary_captured_at: 2026-08-22
   source_url: https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
-  record: knowledge/live-2026-08-22/MANIFEST.md
+  record: evaluations/source-capture.md
+  current_audit: evaluations/live-editor-audit-2026-09-21.md
+  recommended_model_label: Thinking 5.6
+  preview_model_label: GPT-5.6 Sol
+  capabilities:
+    web: true
+    image_generation: true
+    code_interpreter: false
+    actions_configured: false
 objectives:
   mission: objectives/mission.md
   metrics: objectives/success-metrics.md
@@ -23,10 +33,82 @@ identity:
 instructions:
   system: instructions/system.md
   guardrails: instructions/guardrails.md
-skills: []
+skills:
+  - id: ac-estrategista-conteudo-dai
+    entrypoint: SKILL.md
+    interface: agents/openai.yaml
+    references:
+      - references/evidence-policy.md
+      - references/content-outputs.md
+      - references/approval-policy.md
+skill_runtime:
+  name: ac-estrategista-conteudo-dai
+  entrypoint: SKILL.md
+  interface: agents/openai.yaml
+  triggers:
+    - conteúdo contábil
+    - hook
+    - carrossel
+    - Reels
+    - anúncio
+    - copy
+    - roteiro
+    - CTA
+    - QA de claims
+    - Reforma e IA
+    - Desafio Contadora CEO com IA
+  evidence_policy: references/evidence-policy.md
+  content_outputs: references/content-outputs.md
+  approval_policy: references/approval-policy.md
+  knowledge:
+    - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+    - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+    - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+    - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+    - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+    - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+    - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+    - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+    - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+    - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+    - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
+  package:
+    - SKILL.md
+    - agent.yaml
+    - agents/openai.yaml
+    - references/evidence-policy.md
+    - references/content-outputs.md
+    - references/approval-policy.md
+    - identity/identity.md
+    - identity/soul.md
+    - objectives/mission.md
+    - objectives/non-goals.md
+    - objectives/success-metrics.md
+    - instructions/system.md
+    - instructions/guardrails.md
+    - instructions/workflows/main.md
+    - knowledge/active-2026-09-21/00-INDICE-CONTEUDO-DAI.md
+    - knowledge/active-2026-09-21/01-REGRAS-DE-USO-E-LIMITES.md
+    - knowledge/active-2026-09-21/02-ESCOPO-E-ROTEAMENTO.md
+    - knowledge/active-2026-09-21/03-FONTES-CANONICAS.md
+    - knowledge/active-2026-09-21/04-SKILLS-E-CENARIOS-DE-USO.md
+    - knowledge/active-2026-09-21/05-PERGUNTAS-TESTE-E-RESPOSTAS-ESPERADAS.md
+    - knowledge/active-2026-09-21/06-GUARDRAILS-E-CLAIMS-BLOQUEADOS.md
+    - knowledge/active-2026-09-21/07-MODELOS-DE-RESPOSTA-E-CHECKLISTS.md
+    - knowledge/active-2026-09-21/08-LACUNAS-E-ROADMAP.md
+    - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md
+    - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
 connectors: []
 evaluations:
   - evaluations/source-capture.md
+  - evaluations/live-editor-audit-2026-09-21.md
+  - evaluations/parity/questions.yaml
+  - evaluations/parity/P1.md
+  - evaluations/parity/P2.md
+  - evaluations/parity/P3.md
+  - evaluations/parity/P4.md
+  - evaluations/parity/P5.md
+  - evaluations/parity/P6.md
   - evaluations/scenarios/T1.md
   - evaluations/scenarios/T2.md
   - evaluations/scenarios/T3.md

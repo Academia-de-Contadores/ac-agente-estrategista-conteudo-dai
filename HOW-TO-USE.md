@@ -1,116 +1,76 @@
-# Como usar este repositório canônico
-
-## Visão geral
-
-Este repositório canônico separa o núcleo do agente — objetivos, identidade e
-instruções — de suas capacidades, Knowledge, integrações e traduções para
-plataformas. O Git é a fonte de verdade: a plataforma de execução recebe uma
-reconstrução do conteúdo versionado, nunca o contrário sem revisão.
+# Como usar a skill Conteúdo D.A.I.
 
 ## Começo rápido
 
-1. Abra uma branch do repositório canônico que será alterado.
-2. Defina ID, nome, versão e referências em `agent.yaml`.
-3. Preencha missão, métricas e não-objetivos; depois identidade e comportamento.
-4. Adicione avaliações, rode a suíte e abra um pull request conforme
-   `governance/CONTRIBUTING.md`.
+Escreva `Use $ac-estrategista-conteudo-dai` e diga o formato, o público, a cena
+ou dor e o CTA. Se não souber tudo, peça o rascunho mesmo assim: a skill pode
+usar uma hipótese editorial marcada e entregar algo revisável.
 
-## Criar um agente novo
+```text
+Use $ac-estrategista-conteudo-dai com /carrossel. Faça 8 slides para donas de escritório sobre onboarding no improviso. CTA para o Desafio Contadora CEO com IA. Não invente números.
+```
 
-Para iniciar um agente novo, crie um repositório a partir do template canônico e
-então siga este fluxo no novo repositório canônico. Substitua os exemplos em
-`objectives/`, `identity/` e `instructions/` antes de criar capabilities. O prompt
-principal fica em `instructions/system.md`; regras de segurança, limites e
-aprovações ficam em `instructions/guardrails.md`. Registre cada componente
-utilizado em `agent.yaml` e mantenha o primeiro escopo pequeno e avaliável.
+Não envie dados de cliente, senha, token, certificado ou material sem
+autorização de uso.
 
-## Importar um agente existente
+## Escolher a saída
 
-Converta o prompt atual para `instructions/system.md` e separe regras permanentes
-em `instructions/guardrails.md`. Inventarie anexos, procedimentos, Actions e
-configurações, eliminando segredos e dados operacionais. Importe conteúdo usado
-pelo modelo para `knowledge/`, procedimentos repetíveis para `skills/` e schemas
-de integrações para `connectors/`; só publique após uma avaliação de regressão.
+- `/carrossel`: slides completos, legenda e QA;
+- `/reels`: roteiro com timing, fala, texto na tela, cena, legenda e QA;
+- `/angulos`: cinco alternativas por padrão, cada uma com evidência/lacuna,
+  CTA e claim evitado;
+- `/qa-claims`: tabela de risco, reescrita e peça completa revisada;
+- `/sequencia`: textos completos por canal, com papel e estado de execução;
+- `/adaptar`: converte uma peça para outro canal sem aumentar a certeza;
+- handoff técnico: preserva o conteúdo útil e prepara a pergunta ao especialista.
 
-## Alterar o comportamento
+Os contratos completos estão em `references/content-outputs.md`.
 
-Classifique a mudança como editorial, funcional ou crítica. Edite o componente
-canônico responsável: objetivo não é identidade, regra geral não é skill e
-integração não é adapter. Atualize avaliações antes de mudanças comportamentais,
-a versão e o changelog quando exigidos pela política, e peça revisão humana para
-mudanças críticas.
+## Entender evidência e revisão
 
-## Adicionar Knowledge
+O Knowledge oferece cenas e modelos, não prova resultados nem regra vigente.
+Quando faltar suporte, a resposta usa `[LACUNA DE EVIDÊNCIA]`,
+`[REVISÃO TÉCNICA]` ou `[HIPÓTESE EDITORIAL]`. Isso bloqueia somente o claim
+sem suporte; o restante do rascunho continua sendo entregue.
 
-`knowledge/` recebe conteúdo curado que o modelo poderá consultar: `.md`, `.txt`,
-`.pdf`, `.csv`, JSON de referência, imagens e planilhas. Para cada fonte, mantenha
-um manifesto versionado com fonte, data, licença e hash; o manifesto descreve o
-material sem incluir credenciais ou dados proibidos. Não coloque aqui manuais de
-manutenção, conversas, logs, dados de clientes, corpora brutos ou índices RAG.
-Avalie a resposta e a segurança quando o conteúdo puder alterar comportamento ou
-risco.
+Claims como “elimina erros”, “economia garantida”, “cliente garantido”, “dobra
+a carteira em 90 dias” ou “substitui o contador” são bloqueados e reescritos.
 
-## Adicionar uma skill
+## Entender publicação
 
-Crie `skills/<nome>/SKILL.md` com gatilho, entradas, passos, saída, limites,
-handoff humano e dependências. Inclua casos em `skills/<nome>/evaluations/` e
-registre a skill em `agent.yaml` quando ela fizer parte do agente. Uma skill é um
-procedimento acionável; uma regra aplicada sempre pertence a `instructions/`.
+Criar conteúdo é preparação. Publicar, programar, impulsionar ou enviar exige
+aprovação humana imediatamente antes de cada ação exata, com peça, versão,
+canal/conta, público e horário definidos. Sem isso, o estado permanece
+`NÃO PUBLICADO / NÃO ENVIADO`.
 
-## Adicionar um connector ou Action
+## Instalação seletiva da candidata
 
-Um conector descreve o acesso a um sistema externo, sem conter seu segredo. Para
-uma Action, versione o OpenAPI em `connectors/actions/<nome>/openapi.yaml`, junto
-com exemplos sintéticos, permissões, fallback e avaliações de indisponibilidade.
-Endpoints privados e credenciais existem somente no runtime por variáveis de
-ambiente; registre apenas seus nomes e o contrato público de uso.
+O checkout inteiro não é uma pasta de skill. A lista normativa está em
+`agent.yaml`, em `skill_runtime.package`. Instale somente esses 25 caminhos em
+uma pasta nova chamada `ac-estrategista-conteudo-dai` no diretório de skills do
+runtime. Preserve a estrutura relativa e copie arquivos regulares; não copie
+`.git`, `.github`, históricos de `knowledge/`, manifesto, avaliações,
+governança, relatórios, scripts, testes ou `.gitkeep`.
 
-## Criar profiles e adapters
-
-Profiles recortam a distribuição por público, risco ou canal; adapters traduzem o
-agente canônico para uma plataforma. Cada `profile.yaml` e `adapter.yaml` declara
-`canonical_agent_version` igual a `agent.version`. Documente limitações do destino
-e não replique nem redefina missão, identidade ou instruções canônicas.
-
-## Testar e validar
-
-Execute sempre:
+Antes de instalar, valide a candidata na raiz do repositório:
 
 ```bash
 bash tests/validate-agent-repo.test.sh
+bash tests/validate-content-skill.test.sh
 bash scripts/validate-agent-repo.sh
+ruby scripts/validate-content-skill.rb
+/Users/levy/.pyenv/versions/3.10.13/bin/python3 /Users/levy/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
 git diff --check
 ```
 
-Acrescente avaliações de cenário, segurança, regressão ou conector conforme o
-risco. O primeiro comando prova os casos negativos do validador; o segundo valida
-o repositório que será publicado.
+Para conferir uma instalação seletiva, compare a lista de arquivos com
+`skill_runtime.package`: devem existir 25 arquivos, 11 em
+`knowledge/active-2026-09-21/`, zero symlinks e zero `.gitkeep`.
 
-## Publicar uma mudança
+## Avaliar antes de promover
 
-Revise o diff, atualize `CHANGELOG.md` e `agent.yaml` se houver versão nova, e
-sincronize profiles/adapters. Crie uma branch, faça commits claros, abra PR com
-classe, riscos e evidências de avaliação, e obtenha a revisão humana exigida. Use
-squash merge; não publique diretamente em `main`.
-
-## Recriar em outra plataforma
-
-Parta de `agent.yaml`, copie o núcleo canônico e conecte skills, Knowledge e
-contratos suportados pelo destino. Traduza limitações em `adapters/<plataforma>/`,
-sem mudar o comportamento central. Injete credenciais no runtime, execute as
-avaliações e registre qualquer diferença material como adapter, decisão ou risco.
-
-## Segurança e arquivos que não entram no Git
-
-Nunca versione segredo, `.env`, chave privada, credencial, conversa, dado de
-cliente, log, exportação operacional, corpus ou índice RAG. O validador também
-bloqueia artefatos vetoriais e arquivos maiores que 5 MB. Em caso de exposição,
-pare a publicação, revogue e rotacione o segredo e siga
-`governance/DATA-AND-SECRETS.md`.
-
-## Onde encontrar ajuda
-
-Use `docs/REPOSITORY-STRUCTURE.md` para decidir o destino de um arquivo,
-`governance/CONTRIBUTING.md` para o processo, e as políticas em `governance/` para
-dados, mudanças, release e riscos. Quando o impacto não estiver claro, registre a
-lacuna no pull request e peça decisão ao owner antes de alterar o núcleo.
+Execute P1–P6 em `evaluations/parity/`. Cada caso vale 12 pontos e exige mínimo
+10/12, nenhuma dimensão com zero e seis gates em PASS. Uma avaliação
+automatizada/agente pode qualificar a candidata; revisão humana pode acrescentar
+controle, mas não é o único mecanismo de qualificação. Promoção de lifecycle e
+release continuam decisões separadas e não são afirmadas por este pacote.

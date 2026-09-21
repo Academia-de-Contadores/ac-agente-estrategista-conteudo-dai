@@ -20,6 +20,14 @@ required=(
   identity/identity.md
   instructions/system.md
   instructions/guardrails.md
+  instructions/workflows/main.md
+  SKILL.md
+  agents/openai.yaml
+  references/evidence-policy.md
+  references/content-outputs.md
+  references/approval-policy.md
+  evaluations/parity/questions.yaml
+  scripts/validate-content-skill.rb
   governance/CONTRIBUTING.md
   governance/CHANGE-POLICY.md
   governance/RELEASE-POLICY.md
@@ -228,5 +236,7 @@ validate_versioned_components() {
 
 validate_versioned_components profiles profile.yaml
 validate_versioned_components adapters adapter.yaml
+
+ruby "$root/scripts/validate-content-skill.rb"
 
 echo "agent repository validation passed"

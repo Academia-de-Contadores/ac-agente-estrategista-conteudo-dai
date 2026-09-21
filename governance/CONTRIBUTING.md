@@ -31,7 +31,7 @@ sempre atualiza a versão e as avaliações correspondentes.
 | Mudança | Arquivos mínimos |
 | --- | --- |
 | Objetivo, identidade ou comportamento permanente | componente canônico afetado, `agent.yaml`, avaliação e `CHANGELOG.md` |
-| Skill ou workflow | `skills/<nome>/SKILL.md`, sua avaliação e referência em `agent.yaml` quando aplicável |
+| Skill ou workflow | `SKILL.md`, referências, avaliação e `skill_runtime` em `agent.yaml` |
 | Knowledge | arquivo curado, manifesto com fonte/data/licença/hash e avaliação se alterar resposta ou risco |
 | Connector ou Action | contrato, exemplo sem segredo, fallback, avaliação e `agent.yaml` |
 | Profile ou adapter | manifesto com `canonical_agent_version`, documentação de limitação e regressão aplicável |
@@ -45,7 +45,8 @@ sempre atualiza a versão e as avaliações correspondentes.
    não relacionada com uma mudança funcional ou crítica.
 3. Atualize as avaliações antes da implementação quando a alteração muda
    comportamento, limites, dados ou integração.
-4. Execute `bash tests/validate-agent-repo.test.sh` e
+4. Execute `bash tests/validate-agent-repo.test.sh`,
+   `bash tests/validate-content-skill.test.sh` e
    `bash scripts/validate-agent-repo.sh`; inclua validações específicas do
    componente modificado.
 5. Aplique versionamento semântico conforme `RELEASE-POLICY.md`, atualize
