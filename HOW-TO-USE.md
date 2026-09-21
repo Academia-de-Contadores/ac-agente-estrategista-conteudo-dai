@@ -85,5 +85,6 @@ automatizada/agente pode qualificar a skill; revisão humana pode acrescentar
 controle, mas não é o único mecanismo de qualificação. A versão 0.2.0 já foi
 promovida a `validated`; release e publicação continuam decisões separadas e
 não são afirmadas por este pacote. Como a promoção alterou arquivos do pacote,
-a instalação seletiva anterior precisa ser refeita para receber os metadados e
-as métricas validadas.
+a instalação seletiva foi refeita em 2026-09-21 e o runtime instalado está
+byte a byte sincronizado com os metadados e as métricas validadas. Em mudanças
+futuras do pacote, repita a instalação seletiva e as verificações acima.

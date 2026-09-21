@@ -30,6 +30,8 @@ Todas as mudanças relevantes deste agente serão registradas aqui.
   com 72/72 critérios, 72/72 pontos, 36/36 gates e 6/6 casos qualificados.
 - Promove o lifecycle de `candidate` para `validated`, mantendo a versão 0.2.0;
   isso não declara push, merge, publicação, catálogo ou release.
+- Registra a reinstalação seletiva pós-promoção, byte a byte igual ao pacote
+  validado, com 25 arquivos, 11 Knowledge e hash agregado verificável.
 
 ## 0.1.0
 

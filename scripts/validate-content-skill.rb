@@ -18,7 +18,7 @@ VALIDATION_COMMITS = {
   "contract_correction_commit" => "54eb7bfc81125e38eed4cabcb18c4a8c2577e038",
   "final_revalidation_commit" => "5be973f532474ead58592a7889bbf58903d54486"
 }.freeze
-INSTALLATION_HASH = "68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140"
+PRE_PROMOTION_INSTALLATION_HASH = "68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140"
 PROMOTED_PACKAGE_HASH = "45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30"
 
 ACTIVE_KNOWLEDGE = %w[
@@ -215,12 +215,30 @@ expected_installation = {
   "knowledge_files" => 11,
   "symlinks" => 0,
   "gitkeep_files" => 0,
-  "aggregate_sha256" => INSTALLATION_HASH,
+  "aggregate_sha256" => PRE_PROMOTION_INSTALLATION_HASH,
   "byte_equal_to_source_package" => true
 }
 expected_installation.each do |field, value|
   actual = field == "verified_at" ? installation[field].to_s : installation[field]
   fail_validation("installation evidence mismatch at #{field}") unless actual == value
+end
+
+post_installation = validation.fetch("selective_installation_after_promotion", {})
+expected_post_installation = {
+  "reinstalled_at" => "2026-09-21",
+  "logical_path" => "$CODEX_HOME/skills/ac-estrategista-conteudo-dai",
+  "files" => 25,
+  "knowledge_files" => 11,
+  "symlinks" => 0,
+  "gitkeep_files" => 0,
+  "aggregate_sha256" => PROMOTED_PACKAGE_HASH,
+  "byte_equal_to_source_package" => true,
+  "quick_validate" => "PASS",
+  "content_validator" => "PASS"
+}
+expected_post_installation.each do |field, value|
+  actual = field == "reinstalled_at" ? post_installation[field].to_s : post_installation[field]
+  fail_validation("post-promotion installation evidence mismatch at #{field}") unless actual == value
 end
 
 promoted_package = validation.fetch("package_after_promotion", {})
@@ -230,11 +248,50 @@ end
 unless promoted_package["simulated_aggregate_sha256"] == PROMOTED_PACKAGE_HASH
   fail_validation("promoted package aggregate hash mismatch")
 end
-fail_validation("promotion must require reinstall") unless promoted_package["reinstall_required"] == true
+unless promoted_package["reinstalled_at"].to_s == "2026-09-21"
+  fail_validation("promoted package reinstall date mismatch")
+end
+fail_validation("promotion reinstall must be complete") unless promoted_package["reinstall_required"] == false
 
 required_evaluations = expected_evidence_reports.values.grep(%r{\Aevaluations/})
 required_evaluations.each do |relative_path|
   fail_validation("validation evaluation must be registered: #{relative_path}") unless agent.fetch("evaluations", []).include?(relative_path)
+end
+
+personal_home_pattern = Regexp.new(Regexp.escape("/" + "Users" + "/") + "[^/\\s]+/")
+historical_personal_path_artifacts = %w[
+  evaluations/parity/local-parity-evaluation-2026-09-21.md
+  evaluations/parity/local-parity-evaluation-2026-09-21.yaml
+  evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
+  evaluations/parity/local-parity-evaluation-2026-09-21-r2.yaml
+].freeze
+Dir.glob(ROOT.join("**/*"), File::FNM_DOTMATCH).each do |path_string|
+  path = Pathname.new(path_string)
+  relative_path = path.relative_path_from(ROOT).to_s
+  next unless path.file?
+  next if relative_path.split("/").include?(".git")
+  next if historical_personal_path_artifacts.include?(relative_path)
+
+  contents = path.binread.force_encoding(Encoding::UTF_8)
+  next unless contents.valid_encoding?
+  fail_validation("personal home path is forbidden: #{relative_path}") if contents.match?(personal_home_pattern)
+end
+
+operational_status_text = [
+  ROOT.join("agent.yaml").read,
+  ROOT.join("HOW-TO-USE.md").read,
+  ROOT.join(VALIDATION_REPORT).read
+].join("\n")
+stale_reinstall_patterns = [
+  /reinstall_required:\s*true/i,
+  /precisa ser reinstalad[ao]/i,
+  /precisa ser refeita/i,
+  /reinstalação[^.\n]*\b(?:pendente|necessária)\b/i
+]
+stale_reinstall_patterns.each do |pattern|
+  if operational_status_text.match?(pattern)
+    fail_validation("stale pending-reinstall language: #{pattern.source}")
+  end
 end
 
 declared_runtime_paths = [
@@ -435,7 +492,7 @@ required_validation_evidence = [
   "**VALIDATED.**",
   "g-6a7259c849d4819194844f4d99c1213d",
   "913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247",
-  INSTALLATION_HASH,
+  PRE_PROMOTION_INSTALLATION_HASH,
   PROMOTED_PACKAGE_HASH,
   *VALIDATION_COMMITS.values,
   "25 arquivos regulares",
@@ -448,7 +505,12 @@ required_validation_evidence = [
   "6/6 casos",
   "F-BLOCKER-001",
   "C0/I0/M0",
-  "precisa ser reinstalada",
+  "$CODEX_HOME/skills/ac-estrategista-conteudo-dai",
+  "caminho lógico",
+  "byte a byte igual ao pacote de origem",
+  "`quick_validate.py`: PASS",
+  "`scripts/validate-content-skill.rb`: PASS",
+  "byte a byte\nsincronizada com o pacote promovido",
   "não houve push, merge, publicação, catálogo ou release"
 ]
 required_validation_evidence.each do |fragment|

@@ -48,6 +48,8 @@ somente bytes, contagem de linhas, SHA-256, score e gates necessários para
 auditoria. Portanto, o relatório comprova a execução e seu resultado registrado,
 mas não permite reconstruir as respostas a partir do Git.
 
-Essa paridade online qualifica a baseline do GPT sob a rubrica P1–P6. Ela não
-altera sozinha o lifecycle da candidata local, não prova instalação local e não
-constitui publicação ou release.
+Essa paridade online qualificou a baseline do GPT sob a rubrica P1–P6. Naquele
+momento, o relatório online sozinho não promoveu o lifecycle local nem provou a
+instalação local; a promoção e a instalação posteriores estão registradas em
+`reports/validation-2026-09-21.md`. O resultado online não constitui publicação
+ou release.

@@ -148,12 +148,24 @@ validation:
     gitkeep_files: 0
     aggregate_sha256: 68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140
     byte_equal_to_source_package: true
+  selective_installation_after_promotion:
+    reinstalled_at: 2026-09-21
+    logical_path: $CODEX_HOME/skills/ac-estrategista-conteudo-dai
+    files: 25
+    knowledge_files: 11
+    symlinks: 0
+    gitkeep_files: 0
+    aggregate_sha256: 45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30
+    byte_equal_to_source_package: true
+    quick_validate: PASS
+    content_validator: PASS
   package_after_promotion:
     changed_packaged_files:
       - skill-runtime.yaml
       - objectives/success-metrics.md
     simulated_aggregate_sha256: 45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30
-    reinstall_required: true
+    reinstalled_at: 2026-09-21
+    reinstall_required: false
 data_policy:
   allowed_classes:
     - public

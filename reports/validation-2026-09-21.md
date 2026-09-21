@@ -20,9 +20,11 @@ não houve push, merge, publicação, catálogo ou release.
 
 ## Evidência de instalação seletiva pré-promoção
 
-A instalação real em
-`/Users/levy/.codex/skills/ac-estrategista-conteudo-dai` foi inspecionada antes
-da promoção e estava byte a byte igual ao pacote de origem naquele momento:
+A instalação real no caminho lógico
+`$CODEX_HOME/skills/ac-estrategista-conteudo-dai` foi inspecionada antes da
+promoção e estava byte a byte igual ao pacote de origem naquele momento. Esse
+é um caminho lógico relativo ao diretório de configuração do Codex, não um
+caminho literal dependente de usuário:
 
 - 25 arquivos regulares;
 - 11 arquivos de Knowledge ativos;
@@ -35,8 +37,23 @@ O hash agregado é o SHA-256 da saída de `shasum -a 256` para os 25 arquivos,
 ordenados pelo caminho relativo em locale C. A promoção adiciona `version` e
 `lifecycle` a `skill-runtime.yaml` e atualiza
 `objectives/success-metrics.md`; por isso a instalação real anterior deixa de
-representar o pacote promovido e precisa ser reinstalada. Nenhuma reinstalação
-foi feita nesta decisão.
+representar o pacote promovido. Essa necessidade foi atendida pela reinstalação
+pós-promoção registrada abaixo.
+
+## Reinstalação seletiva pós-promoção
+
+Em 2026-09-21, o pacote promovido foi reinstalado no mesmo caminho lógico e
+validado contra a origem:
+
+- 25 arquivos regulares;
+- 11 arquivos de Knowledge ativos;
+- 0 symlinks;
+- 0 `.gitkeep`;
+- byte a byte igual ao pacote de origem;
+- `quick_validate.py`: PASS;
+- `scripts/validate-content-skill.rb`: PASS;
+- SHA-256 agregado:
+  `45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30`.
 
 ## Evidência online e local
 
@@ -64,5 +81,5 @@ mesmos 11 Knowledge, mas dois arquivos empacotados mudaram. A instalação
 simulada do pacote promovido passou o `quick_validate.py`, sem symlink ou
 `.gitkeep`, com SHA-256 agregado
 `45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30`;
-uma reinstalação seletiva posterior é necessária para sincronizar o runtime
-instalado.
+a reinstalação real posterior também passou as verificações e está byte a byte
+sincronizada com o pacote promovido.

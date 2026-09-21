@@ -62,10 +62,23 @@ if grep -Eq 'delete_suffix|chomp|rstrip|strip' "$validator"; then
   echo "instruction parity must not normalize instructions/system.md" >&2
   exit 1
 fi
-if grep -Fq '/Users/levy/' "$root/HOW-TO-USE.md"; then
-  echo "HOW-TO-USE contains a personal absolute path" >&2
-  exit 1
-fi
+personal_home="$(printf '/%s/%s/' Users levy)"
+ruby -e '
+  root, needle = ARGV
+  allowed = %w[
+    evaluations/parity/local-parity-evaluation-2026-09-21.md
+    evaluations/parity/local-parity-evaluation-2026-09-21.yaml
+    evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
+    evaluations/parity/local-parity-evaluation-2026-09-21-r2.yaml
+  ]
+  offenders = Dir.glob(File.join(root, "**/*"), File::FNM_DOTMATCH).select do |path|
+    next false unless File.file?(path)
+    relative = path.delete_prefix(root + "/")
+    next false if relative.split("/").include?(".git") || allowed.include?(relative)
+    File.binread(path).include?(needle)
+  end
+  abort "repository contains a personal absolute path: #{offenders.join(", ")}" unless offenders.empty?
+' "$root" "$personal_home"
 
 fixture="$(mktemp -d)"
 trap 'rm -rf "$fixture"' EXIT
@@ -110,10 +123,34 @@ sed 's/5be973f532474ead58592a7889bbf58903d54486/00000000000000000000000000000000
 expect_rejected "incorrect final revalidation commit"
 mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
 
+cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
+ruby -pi -e 'sub("reinstall_required: false", "reinstall_required: " + "true")' \
+  "$fixture/agent.yaml"
+expect_rejected "post-promotion reinstall marked pending"
+mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
+
+cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
+ruby -pi -e 'in_after = true if /selective_installation_after_promotion:/; sub("byte_equal_to_source_package: true", "byte_equal_to_source_package: false") if in_after' \
+  "$fixture/agent.yaml"
+expect_rejected "post-promotion installation not byte-equal"
+mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
+
 cp "$fixture/reports/validation-2026-09-21.md" "$fixture/validation-report.md.valid"
 sed '/C0\/I0\/M0/d' "$fixture/validation-report.md.valid" > \
   "$fixture/reports/validation-2026-09-21.md"
 expect_rejected "canonical report without final finding counts"
+mv "$fixture/validation-report.md.valid" "$fixture/reports/validation-2026-09-21.md"
+
+cp "$fixture/reports/validation-2026-09-21.md" "$fixture/validation-report.md.valid"
+printf '\n/%s/%s/private/path\n' Users example >> \
+  "$fixture/reports/validation-2026-09-21.md"
+expect_rejected "canonical report with a personal home path"
+mv "$fixture/validation-report.md.valid" "$fixture/reports/validation-2026-09-21.md"
+
+cp "$fixture/reports/validation-2026-09-21.md" "$fixture/validation-report.md.valid"
+printf '\nA reinstalação ainda está pendente.\n' >> \
+  "$fixture/reports/validation-2026-09-21.md"
+expect_rejected "canonical report with stale pending-reinstall language"
 mv "$fixture/validation-report.md.valid" "$fixture/reports/validation-2026-09-21.md"
 
 cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
