@@ -1,5 +1,12 @@
 # Ficha de captura da fonte
 
+## Decisão de validação em 2026-09-21
+
+A fonte online permanece um GPT em rascunho e não foi publicada nem alterada.
+A skill local 0.2.0 foi promovida separadamente a `validated` após a baseline
+online, a verificação da instalação seletiva e a revalidação local R2. O sumário
+canônico e a cadeia de commits estão em `reports/validation-2026-09-21.md`.
+
 ## Estado reconfirmado em 2026-09-21
 
 - Auditoria corrente: `evaluations/live-editor-audit-2026-09-21.md`.
@@ -18,7 +25,8 @@
 - Seis ensaios online autenticados qualificaram o baseline com 72/72 pontos e
   36/36 gates; fingerprints completos estão em
   `reports/online-parity-2026-09-21.md`. Os outputs brutos não foram versionados
-  e o resultado não declara a candidata local como validada.
+  e, isoladamente, esse resultado não declarou a skill local como validada; a
+  decisão posterior está no relatório canônico citado acima.
 
 ## Registro histórico — 2026-08-06
 

@@ -1,5 +1,5 @@
 schema_version: 1
-suite: conteudo-dai-candidate-0.2.0
+suite: conteudo-dai-validated-0.2.0
 baseline: g-6a7259c849d4819194844f4d99c1213d
 cases:
   - id: P1

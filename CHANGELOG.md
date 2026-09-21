@@ -4,7 +4,7 @@ Todas as mudanças relevantes deste agente serão registradas aqui.
 
 ## 0.2.0 — 2026-09-21
 
-- Prepara a candidata `$ac-estrategista-conteudo-dai` com entrada operacional,
+- Prepara a skill `$ac-estrategista-conteudo-dai` com entrada operacional,
   interface, contratos de saída, política de evidência e gate de publicação.
 - Materializa o snapshot misto de 11 anexos em
   `knowledge/active-2026-09-21/`, preservando os históricos.
@@ -24,8 +24,12 @@ Todas as mudanças relevantes deste agente serão registradas aqui.
 - Registra em `reports/online-parity-2026-09-21.md` a execução autenticada
   P1–P6, com fingerprints completos, 72/72 pontos, 36/36 gates e retenção
   explícita sem outputs brutos.
-- Mantém o lifecycle `candidate`: a paridade online qualifica a baseline, mas
-  não declara validação ou instalação local, publicação ou release da skill.
+- Registra a instalação seletiva real pré-promoção com 25 arquivos, 11 Knowledge,
+  zero symlinks, zero `.gitkeep` e hash agregado verificável.
+- Registra a avaliação local R1 bloqueada, a correção do contrato e a R2 final
+  com 72/72 critérios, 72/72 pontos, 36/36 gates e 6/6 casos qualificados.
+- Promove o lifecycle de `candidate` para `validated`, mantendo a versão 0.2.0;
+  isso não declara push, merge, publicação, catálogo ou release.
 
 ## 0.1.0
 

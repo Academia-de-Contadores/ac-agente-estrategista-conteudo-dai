@@ -29,6 +29,7 @@ required=(
   references/approval-policy.md
   evaluations/parity/questions.yaml
   reports/online-parity-2026-09-21.md
+  reports/validation-2026-09-21.md
   scripts/validate-content-skill.rb
   governance/CONTRIBUTING.md
   governance/CHANGE-POLICY.md

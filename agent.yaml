@@ -3,7 +3,7 @@ agent:
   id: ac.estrategista-conteudo-dai
   name: Estrategista de Conteúdo D.A.I. Oficial
   version: 0.2.0
-  lifecycle: candidate
+  lifecycle: validated
   owners:
     - Academia-de-Contadores
 catalog:
@@ -44,6 +44,8 @@ skills:
       - references/approval-policy.md
 skill_runtime:
   name: ac-estrategista-conteudo-dai
+  version: 0.2.0
+  lifecycle: validated
   manifest: skill-runtime.yaml
   entrypoint: SKILL.md
   interface: agents/openai.yaml
@@ -123,7 +125,35 @@ evaluations:
   - evaluations/regression/H1.md
   - evaluations/regression/H2.md
   - evaluations/regression/H3.md
+  - evaluations/parity/local-parity-evaluation-2026-09-21.md
+  - evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
 profiles: []
+validation:
+  status: validated
+  decided_at: 2026-09-21
+  report: reports/validation-2026-09-21.md
+  evidence:
+    corrective_review_commit: d324bc9296b0a6e093c881d9d6acdf44c4512526
+    forward_local_commit: 5e366596fa75b0b4d352e10606c4aaa6e502b4fb
+    contract_correction_commit: 54eb7bfc81125e38eed4cabcb18c4a8c2577e038
+    final_revalidation_commit: 5be973f532474ead58592a7889bbf58903d54486
+    online_report: reports/online-parity-2026-09-21.md
+    local_r1_report: evaluations/parity/local-parity-evaluation-2026-09-21.md
+    local_r2_report: evaluations/parity/local-parity-evaluation-2026-09-21-r2.md
+  selective_installation_before_promotion:
+    verified_at: 2026-09-21
+    files: 25
+    knowledge_files: 11
+    symlinks: 0
+    gitkeep_files: 0
+    aggregate_sha256: 68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140
+    byte_equal_to_source_package: true
+  package_after_promotion:
+    changed_packaged_files:
+      - skill-runtime.yaml
+      - objectives/success-metrics.md
+    simulated_aggregate_sha256: 45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30
+    reinstall_required: true
 data_policy:
   allowed_classes:
     - public

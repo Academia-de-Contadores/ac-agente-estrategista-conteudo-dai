@@ -46,6 +46,7 @@ for relative_path in \
   evaluations/parity/P5.md \
   evaluations/parity/P6.md \
   reports/online-parity-2026-09-21.md \
+  reports/validation-2026-09-21.md \
   scripts/validate-content-skill.rb; do
   test -f "$root/$relative_path"
 done
@@ -92,10 +93,28 @@ expect_rejected "scenario Entrada drift from authenticated prompt"
 mv "$fixture/P2.md.valid" "$fixture/evaluations/parity/P2.md"
 
 cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
-sed 's/^  lifecycle: candidate$/  lifecycle: source-capture/' \
+sed 's/^  lifecycle: validated$/  lifecycle: candidate/' \
   "$fixture/agent.yaml.valid" > "$fixture/agent.yaml"
-expect_rejected "lifecycle other than candidate"
+expect_rejected "agent lifecycle other than validated"
 mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
+
+cp "$fixture/skill-runtime.yaml" "$fixture/skill-runtime.yaml.valid"
+sed 's/^lifecycle: validated$/lifecycle: candidate/' \
+  "$fixture/skill-runtime.yaml.valid" > "$fixture/skill-runtime.yaml"
+expect_rejected "packaged runtime lifecycle other than validated"
+mv "$fixture/skill-runtime.yaml.valid" "$fixture/skill-runtime.yaml"
+
+cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
+sed 's/5be973f532474ead58592a7889bbf58903d54486/0000000000000000000000000000000000000000/' \
+  "$fixture/agent.yaml.valid" > "$fixture/agent.yaml"
+expect_rejected "incorrect final revalidation commit"
+mv "$fixture/agent.yaml.valid" "$fixture/agent.yaml"
+
+cp "$fixture/reports/validation-2026-09-21.md" "$fixture/validation-report.md.valid"
+sed '/C0\/I0\/M0/d' "$fixture/validation-report.md.valid" > \
+  "$fixture/reports/validation-2026-09-21.md"
+expect_rejected "canonical report without final finding counts"
+mv "$fixture/validation-report.md.valid" "$fixture/reports/validation-2026-09-21.md"
 
 cp "$fixture/agent.yaml" "$fixture/agent.yaml.valid"
 sed '\|    - knowledge/active-2026-09-21/09-BANCO-DE-ANGULOS-E-ROTEIROS.md|d' \

@@ -9,6 +9,17 @@ require "yaml"
 
 ROOT = Pathname.new(__dir__).join("..").expand_path
 SKILL_NAME = "ac-estrategista-conteudo-dai"
+VERSION = "0.2.0"
+LIFECYCLE = "validated"
+VALIDATION_REPORT = "reports/validation-2026-09-21.md"
+VALIDATION_COMMITS = {
+  "corrective_review_commit" => "d324bc9296b0a6e093c881d9d6acdf44c4512526",
+  "forward_local_commit" => "5e366596fa75b0b4d352e10606c4aaa6e502b4fb",
+  "contract_correction_commit" => "54eb7bfc81125e38eed4cabcb18c4a8c2577e038",
+  "final_revalidation_commit" => "5be973f532474ead58592a7889bbf58903d54486"
+}.freeze
+INSTALLATION_HASH = "68a9df4a7ba54e0686a8613585c93d7767f1f414279327187e07b0b81ac7e140"
+PROMOTED_PACKAGE_HASH = "45d7d110aec9a27f5cbf5cbfa15f0af5c1548b4d90a25eed0ba46220c7a8ec30"
 
 ACTIVE_KNOWLEDGE = %w[
   00-INDICE-CONTEUDO-DAI.md
@@ -145,8 +156,8 @@ end
 
 agent = load_yaml("agent.yaml")
 agent_data = agent.fetch("agent", {})
-fail_validation("agent.version must be 0.2.0") unless agent_data["version"].to_s == "0.2.0"
-fail_validation("agent.lifecycle must be candidate") unless agent_data["lifecycle"] == "candidate"
+fail_validation("agent.version must be #{VERSION}") unless agent_data["version"].to_s == VERSION
+fail_validation("agent.lifecycle must be #{LIFECYCLE}") unless agent_data["lifecycle"] == LIFECYCLE
 
 skill = agent.fetch("skills", []).find { |entry| entry["id"] == SKILL_NAME }
 fail_validation("missing canonical skill declaration") unless skill
@@ -156,6 +167,8 @@ agent_runtime = agent.fetch("skill_runtime", {})
 runtime = load_yaml("skill-runtime.yaml")
 fail_validation("agent skill_runtime manifest mismatch") unless agent_runtime["manifest"] == "skill-runtime.yaml"
 fail_validation("skill runtime name mismatch") unless runtime["name"] == SKILL_NAME
+fail_validation("skill runtime version mismatch") unless runtime["version"].to_s == VERSION
+fail_validation("skill runtime lifecycle mismatch") unless runtime["lifecycle"] == LIFECYCLE
 fail_validation("skill runtime entrypoint mismatch") unless runtime["entrypoint"] == "SKILL.md"
 fail_validation("skill runtime interface mismatch") unless runtime["interface"] == "agents/openai.yaml"
 fail_validation("skill runtime must declare explicit triggers") unless runtime.fetch("triggers", []).length >= 8
@@ -164,7 +177,7 @@ fail_validation("runtime instructions mismatch") unless runtime["instructions"] 
 fail_validation("runtime Knowledge allowlist mismatch") unless runtime["knowledge"] == ACTIVE_KNOWLEDGE
 fail_validation("runtime package allowlist mismatch") unless runtime["package"] == PACKAGE
 
-%w[name entrypoint interface triggers knowledge package].each do |field|
+%w[name version lifecycle entrypoint interface triggers knowledge package].each do |field|
   unless agent_runtime[field] == runtime[field]
     fail_validation("agent and packaged runtime differ at #{field}")
   end
@@ -175,6 +188,54 @@ RUNTIME_REFERENCES.each do |name, relative_path|
   end
 end
 fail_validation("agent.yaml must not be installed") if runtime.fetch("package").include?("agent.yaml")
+
+validation = agent.fetch("validation", {})
+fail_validation("validation status must be #{LIFECYCLE}") unless validation["status"] == LIFECYCLE
+fail_validation("validation decision date must be 2026-09-21") unless validation["decided_at"].to_s == "2026-09-21"
+fail_validation("canonical validation report mismatch") unless validation["report"] == VALIDATION_REPORT
+
+evidence = validation.fetch("evidence", {})
+VALIDATION_COMMITS.each do |field, commit|
+  fail_validation("validation evidence mismatch at #{field}") unless evidence[field] == commit
+end
+expected_evidence_reports = {
+  "online_report" => "reports/online-parity-2026-09-21.md",
+  "local_r1_report" => "evaluations/parity/local-parity-evaluation-2026-09-21.md",
+  "local_r2_report" => "evaluations/parity/local-parity-evaluation-2026-09-21-r2.md"
+}
+expected_evidence_reports.each do |field, relative_path|
+  fail_validation("validation report reference mismatch at #{field}") unless evidence[field] == relative_path
+  fail_validation("missing validation evidence report: #{relative_path}") unless ROOT.join(relative_path).file?
+end
+
+installation = validation.fetch("selective_installation_before_promotion", {})
+expected_installation = {
+  "verified_at" => "2026-09-21",
+  "files" => 25,
+  "knowledge_files" => 11,
+  "symlinks" => 0,
+  "gitkeep_files" => 0,
+  "aggregate_sha256" => INSTALLATION_HASH,
+  "byte_equal_to_source_package" => true
+}
+expected_installation.each do |field, value|
+  actual = field == "verified_at" ? installation[field].to_s : installation[field]
+  fail_validation("installation evidence mismatch at #{field}") unless actual == value
+end
+
+promoted_package = validation.fetch("package_after_promotion", {})
+unless promoted_package["changed_packaged_files"] == ["skill-runtime.yaml", "objectives/success-metrics.md"]
+  fail_validation("promotion package changes must be explicit")
+end
+unless promoted_package["simulated_aggregate_sha256"] == PROMOTED_PACKAGE_HASH
+  fail_validation("promoted package aggregate hash mismatch")
+end
+fail_validation("promotion must require reinstall") unless promoted_package["reinstall_required"] == true
+
+required_evaluations = expected_evidence_reports.values.grep(%r{\Aevaluations/})
+required_evaluations.each do |relative_path|
+  fail_validation("validation evaluation must be registered: #{relative_path}") unless agent.fetch("evaluations", []).include?(relative_path)
+end
 
 declared_runtime_paths = [
   runtime["entrypoint"],
@@ -276,6 +337,9 @@ end
 fail_validation("instruction file must be 133 lines") unless system_path.binread.lines.length == 133
 
 questions = load_yaml("evaluations/parity/questions.yaml")
+unless questions["suite"] == "conteudo-dai-validated-0.2.0"
+  fail_validation("questions.yaml suite must identify validated 0.2.0")
+end
 question_cases = questions.fetch("cases", [])
 case_ids = question_cases.map { |entry| entry["id"] }
 fail_validation("questions.yaml must define P1..P6") unless case_ids == AUTHENTICATED_PARITY.keys
@@ -362,6 +426,33 @@ end
 AUTHENTICATED_PARITY.each do |case_id, values|
   expected_row = "| #{case_id} | `evaluations/parity/#{case_id}.md` | #{values.fetch(:prompt_bytes)} | `#{values.fetch(:prompt_sha256)}` | #{values.fetch(:response_bytes)} | #{values.fetch(:response_lines)} | `#{values.fetch(:response_sha256)}` | 12/12 | 6/6 |"
   fail_validation("online parity report mismatch for #{case_id}") unless report_text.include?(expected_row)
+end
+
+validation_report = ROOT.join(VALIDATION_REPORT)
+fail_validation("missing canonical validation report") unless validation_report.file?
+validation_text = validation_report.read
+required_validation_evidence = [
+  "**VALIDATED.**",
+  "g-6a7259c849d4819194844f4d99c1213d",
+  "913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247",
+  INSTALLATION_HASH,
+  PROMOTED_PACKAGE_HASH,
+  *VALIDATION_COMMITS.values,
+  "25 arquivos regulares",
+  "11 arquivos de Knowledge ativos",
+  "0 symlinks",
+  "0 `.gitkeep`",
+  "72/72 critérios",
+  "72/72 pontos",
+  "36/36 gates",
+  "6/6 casos",
+  "F-BLOCKER-001",
+  "C0/I0/M0",
+  "precisa ser reinstalada",
+  "não houve push, merge, publicação, catálogo ou release"
+]
+required_validation_evidence.each do |fragment|
+  fail_validation("canonical validation report missing evidence: #{fragment}") unless validation_text.include?(fragment)
 end
 
 Dir.mktmpdir("content-skill-package-") do |directory|

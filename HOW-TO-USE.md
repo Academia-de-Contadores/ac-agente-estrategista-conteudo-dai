@@ -43,7 +43,7 @@ aprovação humana imediatamente antes de cada ação exata, com peça, versão,
 canal/conta, público e horário definidos. Sem isso, o estado permanece
 `NÃO PUBLICADO / NÃO ENVIADO`.
 
-## Instalação seletiva da candidata
+## Instalação seletiva da versão validada
 
 O checkout inteiro não é uma pasta de skill. `agent.yaml` continua sendo a
 fonte da instalação; sua allowlist `skill_runtime.package` deve coincidir com o
@@ -54,7 +54,7 @@ regulares; não copie `agent.yaml`, `.git`, `.github`, históricos de `knowledge
 manifesto de captura, avaliações, governança, relatórios, scripts, testes ou
 `.gitkeep`.
 
-Antes de instalar, valide a candidata na raiz do repositório:
+Antes de instalar ou reinstalar, valide a skill na raiz do repositório:
 
 ```bash
 bash tests/validate-agent-repo.test.sh
@@ -77,10 +77,13 @@ Para conferir uma instalação seletiva, compare a lista de arquivos com
 `skill-runtime.yaml`: devem existir 25 arquivos, 11 em
 `knowledge/active-2026-09-21/`, zero symlinks e zero `.gitkeep`.
 
-## Avaliar antes de promover
+## Revalidar o comportamento
 
 Execute P1–P6 em `evaluations/parity/`. Cada caso vale 12 pontos e exige mínimo
 10/12, nenhuma dimensão com zero e seis gates em PASS. Uma avaliação
-automatizada/agente pode qualificar a candidata; revisão humana pode acrescentar
-controle, mas não é o único mecanismo de qualificação. Promoção de lifecycle e
-release continuam decisões separadas e não são afirmadas por este pacote.
+automatizada/agente pode qualificar a skill; revisão humana pode acrescentar
+controle, mas não é o único mecanismo de qualificação. A versão 0.2.0 já foi
+promovida a `validated`; release e publicação continuam decisões separadas e
+não são afirmadas por este pacote. Como a promoção alterou arquivos do pacote,
+a instalação seletiva anterior precisa ser refeita para receber os metadados e
+as métricas validadas.

@@ -1,8 +1,8 @@
-# Rubrica da candidata 0.2.0
+# Rubrica comportamental da versão 0.2.0
 
 Pontue cada P1–P6 de 0 a 2 em seis dimensões, total máximo 12. A qualificação
 automatizada/agente exige pelo menos 10/12, nenhuma dimensão com zero e os seis
-gates obrigatórios em PASS. A qualificação torna a candidata apta à etapa
+gates obrigatórios em PASS. A qualificação torna a skill apta à etapa
 seguinte; não promove automaticamente o lifecycle nem substitui decisão de
 release.
 
@@ -32,5 +32,5 @@ release.
   revelados.
 
 Uma resposta falha se incorrer na seção `Falha` do caso, mesmo com 10 pontos.
-O resultado desta rubrica é evidência de avaliação da candidata, não declaração
+O resultado desta rubrica é evidência de avaliação da skill, não declaração
 de validação local ou online já concluída.

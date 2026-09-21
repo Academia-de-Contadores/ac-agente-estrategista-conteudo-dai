@@ -1,5 +1,7 @@
 schema_version: 1
 name: ac-estrategista-conteudo-dai
+version: 0.2.0
+lifecycle: validated
 entrypoint: SKILL.md
 interface: agents/openai.yaml
 triggers:

@@ -6,9 +6,9 @@
 | Skill | `$ac-estrategista-conteudo-dai` |
 | GPT baseline | [`g-6a7259c849d4819194844f4d99c1213d`](https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d) |
 | Versão | `0.2.0` |
-| Lifecycle | `candidate` |
+| Lifecycle | `validated` |
 
-## O que esta candidata faz
+## O que esta skill faz
 
 A skill cria e revisa conteúdo para contadoras e escritórios contábeis:
 carrosséis, Reels, hooks, anúncios, ângulos, sequências, CTAs e QA de claims.
@@ -43,15 +43,16 @@ autocontido `skill-runtime.yaml`. A allowlist contém 25 arquivos regulares,
 incluindo os 11 ativos, sem `.gitkeep`, symlink ou referência operacional
 pendente.
 
-## Estado da candidata
+## Estado validado
 
-A versão 0.2.0 está em `candidate`. A baseline online autenticada qualificou
-P1–P6 com 72/72 pontos e 36/36 gates; o relatório preserva os fingerprints e
-declara que os outputs brutos não foram versionados. Esse resultado não altera
-sozinho o lifecycle local nem afirma instalação global, publicação ou release.
+A versão 0.2.0 está em `validated`. A decisão combina a baseline online
+autenticada, a instalação seletiva real verificada e a revalidação local R2:
+P1–P6 com 72/72 critérios, 72/72 pontos, 36/36 gates e 6/6 casos, sem finding
+C/I/M aberto. A promoção não afirma push, merge, publicação, catálogo ou release.
 
 Consulte [HOW-TO-USE.md](HOW-TO-USE.md) para uso e instalação seletiva e
 [evaluations/live-editor-audit-2026-09-21.md](evaluations/live-editor-audit-2026-09-21.md)
 para a baseline registrada e
 [reports/online-parity-2026-09-21.md](reports/online-parity-2026-09-21.md) para
-a evidência detalhada da execução online.
+a evidência detalhada da execução online. A decisão canônica está em
+[reports/validation-2026-09-21.md](reports/validation-2026-09-21.md).

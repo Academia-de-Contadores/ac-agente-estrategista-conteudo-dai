@@ -14,7 +14,9 @@ adaptador a versão canônica publicada.
   comportamentais definidos para a versão;
 - release/publicação: decisão posterior, registrada separadamente.
 
-A candidata 0.2.0 pode ser qualificada por validação automatizada e avaliação de
-agente conforme `objectives/success-metrics.md`. Revisão humana pode ser exigida
-por risco ou mudança crítica, mas não é o único mecanismo de qualificação. A
-execução da suíte, sozinha, não deve alterar silenciosamente o lifecycle.
+A versão 0.2.0 foi promovida a `validated` pela decisão registrada em
+`reports/validation-2026-09-21.md`, após validação automatizada, avaliação de
+agente e verificação de instalação seletiva. Revisão humana pode ser exigida por
+risco ou mudança crítica, mas não é o único mecanismo de qualificação. A
+execução da suíte, sozinha, não altera silenciosamente o lifecycle e a promoção
+não equivale a release, publicação ou entrada em catálogo.
