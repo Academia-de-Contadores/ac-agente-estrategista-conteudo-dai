@@ -16,6 +16,7 @@ source_capture:
   source_url: https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
   record: evaluations/source-capture.md
   current_audit: evaluations/live-editor-audit-2026-09-21.md
+  online_parity_report: reports/online-parity-2026-09-21.md
   recommended_model_label: Thinking 5.6
   preview_model_label: GPT-5.6 Sol
   capabilities:
@@ -43,6 +44,7 @@ skills:
       - references/approval-policy.md
 skill_runtime:
   name: ac-estrategista-conteudo-dai
+  manifest: skill-runtime.yaml
   entrypoint: SKILL.md
   interface: agents/openai.yaml
   triggers:
@@ -74,7 +76,7 @@ skill_runtime:
     - knowledge/active-2026-09-21/99-FONTES-LACUNAS-E-CONTROLE-DE-VERSAO.md
   package:
     - SKILL.md
-    - agent.yaml
+    - skill-runtime.yaml
     - agents/openai.yaml
     - references/evidence-policy.md
     - references/content-outputs.md

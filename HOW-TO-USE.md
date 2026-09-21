@@ -45,12 +45,14 @@ canal/conta, público e horário definidos. Sem isso, o estado permanece
 
 ## Instalação seletiva da candidata
 
-O checkout inteiro não é uma pasta de skill. A lista normativa está em
-`agent.yaml`, em `skill_runtime.package`. Instale somente esses 25 caminhos em
-uma pasta nova chamada `ac-estrategista-conteudo-dai` no diretório de skills do
-runtime. Preserve a estrutura relativa e copie arquivos regulares; não copie
-`.git`, `.github`, históricos de `knowledge/`, manifesto, avaliações,
-governança, relatórios, scripts, testes ou `.gitkeep`.
+O checkout inteiro não é uma pasta de skill. `agent.yaml` continua sendo a
+fonte da instalação; sua allowlist `skill_runtime.package` deve coincidir com o
+manifesto autocontido `skill-runtime.yaml` que entra no pacote. Instale somente
+esses 25 caminhos em uma pasta nova chamada `ac-estrategista-conteudo-dai` no
+diretório de skills do runtime. Preserve a estrutura relativa e copie arquivos
+regulares; não copie `agent.yaml`, `.git`, `.github`, históricos de `knowledge/`,
+manifesto de captura, avaliações, governança, relatórios, scripts, testes ou
+`.gitkeep`.
 
 Antes de instalar, valide a candidata na raiz do repositório:
 
@@ -59,12 +61,20 @@ bash tests/validate-agent-repo.test.sh
 bash tests/validate-content-skill.test.sh
 bash scripts/validate-agent-repo.sh
 ruby scripts/validate-content-skill.rb
-/Users/levy/.pyenv/versions/3.10.13/bin/python3 /Users/levy/.codex/skills/.system/skill-creator/scripts/quick_validate.py .
+python_bin="${PYTHON:-$(command -v python3)}"
+quick_validator="$(find "${CODEX_HOME:-$HOME/.codex}/skills" "$HOME/.agents/skills" -path '*/skill-creator/scripts/quick_validate.py' -print -quit 2>/dev/null)"
+test -n "$python_bin" && test -n "$quick_validator"
+"$python_bin" -c 'import yaml' || { echo 'Defina PYTHON para um python3 com PyYAML.' >&2; exit 1; }
+"$python_bin" "$quick_validator" .
 git diff --check
 ```
 
+Se o `python3` padrão não tiver PyYAML, defina `PYTHON` para outro interpretador
+compatível antes de executar o bloco. O comando descobre o validador nas raízes
+padrão sem presumir nome de usuário ou caminho absoluto da máquina.
+
 Para conferir uma instalação seletiva, compare a lista de arquivos com
-`skill_runtime.package`: devem existir 25 arquivos, 11 em
+`skill-runtime.yaml`: devem existir 25 arquivos, 11 em
 `knowledge/active-2026-09-21/`, zero symlinks e zero `.gitkeep`.
 
 ## Avaliar antes de promover

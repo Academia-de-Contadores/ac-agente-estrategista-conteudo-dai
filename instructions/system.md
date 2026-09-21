@@ -1,13 +1,3 @@
-# Instruções canônicas capturadas
-
-**source_status:** accessible
-**capturada em:** 2026-08-06
-**origem:** https://chatgpt.com/gpts/editor/g-6a7259c849d4819194844f4d99c1213d
-
-O conteúdo abaixo preserva o campo de instruções acessível. Foi removido somente
-o wrapper que mandava colar o texto no GPT Builder; nenhuma regra comportamental
-foi acrescentada.
-
 ---
 title: Conteudo / Marketing / DAI Prompt v3 Beta GPT Builder
 type: prompt_gpt_builder

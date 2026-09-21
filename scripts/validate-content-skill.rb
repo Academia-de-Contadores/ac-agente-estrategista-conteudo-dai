@@ -40,7 +40,7 @@ KNOWLEDGE_INTEGRITY = {
 
 PACKAGE = [
   "SKILL.md",
-  "agent.yaml",
+  "skill-runtime.yaml",
   "agents/openai.yaml",
   "references/evidence-policy.md",
   "references/content-outputs.md",
@@ -55,6 +55,18 @@ PACKAGE = [
   "instructions/workflows/main.md",
   *ACTIVE_KNOWLEDGE
 ].freeze
+
+RUNTIME_INSTRUCTIONS = %w[
+  instructions/system.md
+  instructions/guardrails.md
+  instructions/workflows/main.md
+].freeze
+
+RUNTIME_REFERENCES = {
+  "evidence_policy" => "references/evidence-policy.md",
+  "content_outputs" => "references/content-outputs.md",
+  "approval_policy" => "references/approval-policy.md"
+}.freeze
 
 GATES = %w[
   no-fabrication
@@ -89,12 +101,41 @@ skill = agent.fetch("skills", []).find { |entry| entry["id"] == SKILL_NAME }
 fail_validation("missing canonical skill declaration") unless skill
 fail_validation("skill entrypoint must be SKILL.md") unless skill["entrypoint"] == "SKILL.md"
 
-runtime = agent.fetch("skill_runtime", {})
-fail_validation("skill_runtime.name mismatch") unless runtime["name"] == SKILL_NAME
-fail_validation("skill_runtime.entrypoint mismatch") unless runtime["entrypoint"] == "SKILL.md"
-fail_validation("skill_runtime must declare explicit triggers") unless runtime.fetch("triggers", []).length >= 8
+agent_runtime = agent.fetch("skill_runtime", {})
+runtime = load_yaml("skill-runtime.yaml")
+fail_validation("agent skill_runtime manifest mismatch") unless agent_runtime["manifest"] == "skill-runtime.yaml"
+fail_validation("skill runtime name mismatch") unless runtime["name"] == SKILL_NAME
+fail_validation("skill runtime entrypoint mismatch") unless runtime["entrypoint"] == "SKILL.md"
+fail_validation("skill runtime interface mismatch") unless runtime["interface"] == "agents/openai.yaml"
+fail_validation("skill runtime must declare explicit triggers") unless runtime.fetch("triggers", []).length >= 8
+fail_validation("runtime references mismatch") unless runtime["references"] == RUNTIME_REFERENCES
+fail_validation("runtime instructions mismatch") unless runtime["instructions"] == RUNTIME_INSTRUCTIONS
 fail_validation("runtime Knowledge allowlist mismatch") unless runtime["knowledge"] == ACTIVE_KNOWLEDGE
-fail_validation("package allowlist mismatch") unless runtime["package"] == PACKAGE
+fail_validation("runtime package allowlist mismatch") unless runtime["package"] == PACKAGE
+
+%w[name entrypoint interface triggers knowledge package].each do |field|
+  unless agent_runtime[field] == runtime[field]
+    fail_validation("agent and packaged runtime differ at #{field}")
+  end
+end
+RUNTIME_REFERENCES.each do |name, relative_path|
+  unless agent_runtime[name] == relative_path
+    fail_validation("agent and packaged runtime differ at #{name}")
+  end
+end
+fail_validation("agent.yaml must not be installed") if runtime.fetch("package").include?("agent.yaml")
+
+declared_runtime_paths = [
+  runtime["entrypoint"],
+  runtime["interface"],
+  *runtime.fetch("references").values,
+  *runtime.fetch("instructions"),
+  *runtime.fetch("knowledge")
+]
+undeclared_runtime_paths = declared_runtime_paths.reject { |path| runtime.fetch("package").include?(path) }
+unless undeclared_runtime_paths.empty?
+  fail_validation("runtime references unpackaged paths: #{undeclared_runtime_paths.join(', ')}")
+end
 
 runtime.fetch("package").each do |relative_path|
   path = Pathname.new(relative_path)
@@ -116,6 +157,22 @@ description = skill_meta["description"].to_s
 fail_validation("SKILL.md description must start with Use when") unless description.start_with?("Use when")
 %w[references/evidence-policy.md references/content-outputs.md references/approval-policy.md].each do |reference|
   fail_validation("SKILL.md does not route to #{reference}") unless skill_text.include?(reference)
+end
+fail_validation("SKILL.md must route to skill-runtime.yaml") unless skill_text.include?("`skill-runtime.yaml`")
+
+sensitive_rule_fragments = [
+  "## Dados sensíveis fornecidos diretamente",
+  "não ecoe, use nem persista o valor",
+  "Redija o valor",
+  "rotação ou revogação",
+  "versão anonimizada",
+  "fatos higienizados"
+]
+sensitive_rule_fragments.each do |fragment|
+  fail_validation("S3 runtime rule missing: #{fragment}") unless skill_text.include?(fragment)
+end
+unless agent.fetch("evaluations", []).include?("evaluations/security/S3.md")
+  fail_validation("S3 sensitive-data evaluation must remain registered")
 end
 
 interface = load_yaml("agents/openai.yaml")
@@ -160,16 +217,12 @@ historical_sources.each do |active_path, source_path|
   end
 end
 
-system_text = ROOT.join("instructions/system.md").binread
-lines = system_text.lines
-fail_validation("instructions/system.md wrapper must be ten lines") unless lines.length >= 11 && lines[10] == "---\n"
-payload = lines.drop(10).join
-payload = payload.delete_suffix("\n")
-fail_validation("instruction payload must be 3989 bytes") unless payload.bytesize == 3989
-unless Digest::SHA256.hexdigest(payload) == "913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247"
-  fail_validation("instruction payload SHA-256 mismatch")
+system_path = ROOT.join("instructions/system.md")
+fail_validation("instruction file must be 3989 bytes") unless system_path.size == 3989
+unless Digest::SHA256.file(system_path).hexdigest == "913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247"
+  fail_validation("instruction file SHA-256 mismatch")
 end
-fail_validation("instruction payload must be 133 lines") unless payload.lines.length == 133
+fail_validation("instruction file must be 133 lines") unless system_path.binread.lines.length == 133
 
 questions = load_yaml("evaluations/parity/questions.yaml")
 case_ids = questions.fetch("cases", []).map { |entry| entry["id"] }
@@ -192,13 +245,58 @@ GATES.each do |gate|
 end
 fail_validation("rubric must define 12-point scale") unless rubric.include?("total máximo 12")
 
-required_package_fragments = %w[
-  instructions/system.md
-  instructions/guardrails.md
-  instructions/workflows/main.md
-]
-required_package_fragments.each do |relative_path|
+RUNTIME_INSTRUCTIONS.each do |relative_path|
   fail_validation("missing required instruction in package") unless PACKAGE.include?(relative_path)
+end
+
+operational_markdown = PACKAGE.grep(/\.md\z/)
+operational_path_pattern = /`(skill-runtime\.yaml|(?:agents|references|identity|objectives|instructions|knowledge\/active-2026-09-21)\/[A-Za-z0-9._\/-]+)`/
+operational_markdown.each do |source_path|
+  source_text = ROOT.join(source_path).read
+  source_text.scan(operational_path_pattern).flatten.each do |target_path|
+    available = if target_path.end_with?("/")
+                  PACKAGE.any? { |path| path.start_with?(target_path) }
+                else
+                  PACKAGE.include?(target_path)
+                end
+    fail_validation("dangling packaged-file reference in #{source_path}: #{target_path}") unless available
+  end
+
+  source_text.scan(/\]\(([^)]+)\)/).flatten.each do |raw_target|
+    target_without_fragment = raw_target.split("#", 2).first
+    next if target_without_fragment.empty?
+    next if target_without_fragment.match?(/\A(?:https?:|mailto:)/)
+
+    resolved = Pathname.new(source_path).dirname.join(target_without_fragment).cleanpath.to_s
+    fail_validation("dangling Markdown link in #{source_path}: #{raw_target}") unless PACKAGE.include?(resolved)
+  end
+end
+
+parity_report = ROOT.join("reports/online-parity-2026-09-21.md")
+fail_validation("missing online parity report") unless parity_report.file?
+report_text = parity_report.read
+%w[Thinking\ 5.6 GPT-5.6\ Sol 72/72 36/36].each do |value|
+  fail_validation("online parity report missing #{value.tr('\\', '')}") unless report_text.include?(value.tr("\\", ""))
+end
+unless report_text.include?("preview autenticado") &&
+       report_text.include?("conversa nova") &&
+       report_text.include?("somente texto") &&
+       report_text.include?("outputs brutos das respostas não foram versionados")
+  fail_validation("online parity report method or retention statement is incomplete")
+end
+
+online_cases = {
+  "P1" => [361, "b1853b2e720d7d4de5149e87d610ae6d2f5cf6744a09226e142385173affc2d9", 4431, 113, "36cb3280cbc8555c5f6ca3a1e0a48071ba6261d2e5e05c7a45ddc83c0f01cc85"],
+  "P2" => [354, "c3223dddf6ca3b891687de4406594b08054061535697f3205f362f0a958d2bac", 2622, 50, "b943db32b65a088c1dc8dfd041c17e1aa3c165661d05c810ce8d562d2ffb10ec"],
+  "P3" => [302, "4a3333349d2eea7f067b09523ae2937b823a1cd7bfb49a1ea86d8a8bce144ece", 6980, 93, "c7edc9a2eca0600a60e98c8f54cb413f8a904f194d3ca14fd5caf72ee18f8d43"],
+  "P4" => [367, "0ccd5de1b4c6339761d1a4d088fb9187667af196a179978a89b5fbdbaf8d0571", 4688, 44, "24c9a683024edc262f715850eccc5fd60556e73db65f0ee349156237b9c71f41"],
+  "P5" => [337, "4a30dc34eee7e776926b5ad649506dd8fd81fe546fb21b3476aa07bd82ea720f", 7863, 137, "83c0093359a0d9d020dffe18cef50fed44695e66ab444ea12a0b5b710618e1da"],
+  "P6" => [482, "a4ce946849c165854cb5e290f8622566d1fa409156b77acf4ce5f0c660f8ebd4", 4189, 105, "51f9f4ea43abb45a320f6d8a886211f78144c6281f64331a2f3b97d09c96e3da"]
+}
+online_cases.each do |case_id, values|
+  prompt_bytes, prompt_sha, response_bytes, lines, response_sha = values
+  expected_row = "| #{case_id} | `evaluations/parity/#{case_id}.md` | #{prompt_bytes} | `#{prompt_sha}` | #{response_bytes} | #{lines} | `#{response_sha}` | 12/12 | 6/6 |"
+  fail_validation("online parity report mismatch for #{case_id}") unless report_text.include?(expected_row)
 end
 
 Dir.mktmpdir("content-skill-package-") do |directory|

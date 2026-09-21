@@ -63,3 +63,6 @@ Peça bloqueada em: [trecho]
 
 O briefing não prova que o especialista foi acionado ou que o claim foi
 aprovado.
+
+Os arquivos disponíveis para estes contratos estão declarados em
+`skill-runtime.yaml`. Não dependa de caminho ausente da instalação.

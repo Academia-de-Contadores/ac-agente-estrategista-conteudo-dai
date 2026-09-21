@@ -7,15 +7,18 @@
   status `Rascunho`.
 - Instruções online: 3.989 bytes, 133 linhas e SHA-256
   `913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247`;
-  paridade byte a byte com o payload de `instructions/system.md` após remover
-  o wrapper documental de dez linhas e a quebra final local.
+  paridade byte a byte direta com `instructions/system.md`, sem wrapper,
+  quebra final acrescentada ou normalização no validador. Os metadados de
+  captura permanecem nesta ficha, fora do payload.
 - Knowledge: 11 nomes reconfirmados; conjunto binário ativo materializado em
   `knowledge/active-2026-09-21/` a partir do snapshot misto de 2026-08-22.
 - Modelo: `Thinking 5.6` no seletor e `GPT-5.6 Sol` no preview.
 - Recursos: web e geração de imagens ativadas; Code Interpreter desativado;
   nenhuma Action configurada.
-- Seis ensaios online do baseline passaram, sem mutação ou publicação. Isso não
-  declara a candidata local como validada.
+- Seis ensaios online autenticados qualificaram o baseline com 72/72 pontos e
+  36/36 gates; fingerprints completos estão em
+  `reports/online-parity-2026-09-21.md`. Os outputs brutos não foram versionados
+  e o resultado não declara a candidata local como validada.
 
 ## Registro histórico — 2026-08-06
 
@@ -66,10 +69,10 @@
 ## Dados omitidos
 
 Foram deliberadamente omitidos tokens, credenciais, autenticação, endpoints privados,
-conversas de usuários, dados de clientes, logs, arquivos anexos, corpus, índices RAG
-e qualquer duplicação específica da plataforma. A linha de instrução destinada ao
-campo “Instructions” do GPT Builder e títulos equivalentes foram removidos como
-wrapper de plataforma; o comportamento substantivo foi preservado.
+conversas de usuários, dados de clientes, logs, arquivos anexos, corpus e índices RAG.
+A observação histórica da interface sobre um wrapper de plataforma não descreve
+uma transformação do arquivo atual: `instructions/system.md` é agora o campo
+online bruto exato, e qualquer metadado documental vive nesta ficha.
 
 ## Atualização — recuperação integral do Knowledge (2026-08-07)
 

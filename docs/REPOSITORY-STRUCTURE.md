@@ -10,6 +10,7 @@ controlada dele.
 .
 ├── SKILL.md                    # entrada operacional distribuível
 ├── agent.yaml
+├── skill-runtime.yaml          # manifesto autocontido do pacote instalado
 ├── agents/                     # metadados de interface e invocação
 ├── references/                 # contratos consultados sob demanda pela skill
 ├── objectives/                 # missão, métricas e não-objetivos
@@ -58,6 +59,10 @@ use-a somente com manifesto de tipo, alvo, finalidade e dependência.
 - **Não entra:** prompt completo, personalidade, conteúdo de Knowledge, credencial, dado de cliente ou referência para arquivo inexistente.
 - **Exemplo:** `agent.version: 0.2.0` acompanhado das avaliações e dos `canonical_agent_version` correspondentes em profiles e adapters.
 - **Avaliação ou revisão:** toda mudança exige validação do manifesto; ID, lifecycle, versão, permissões, componentes ou caminhos requerem revisão do owner e avaliações proporcionais ao impacto.
+
+`agent.yaml` é a fonte da instalação no repositório. `skill-runtime.yaml` entra
+no pacote e repete somente os caminhos empacotados; o validador exige igualdade
+entre as allowlists e rejeita referência operacional para arquivo ausente.
 
 ## Arquivos ignorados
 

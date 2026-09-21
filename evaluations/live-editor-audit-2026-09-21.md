@@ -24,9 +24,9 @@ não infere identificador interno nem equivalência adicional.
 
 O campo online bruto tem 3.989 bytes UTF-8, 133 linhas e SHA-256
 `913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247`.
-Ele coincide byte a byte com `instructions/system.md` após remover as dez linhas
-do wrapper documental e a quebra de linha final do arquivo local. O validador
-da candidata fixa esse contrato.
+`instructions/system.md` contém exatamente esses bytes, sem wrapper documental e
+sem quebra de linha final. O validador hasheia o arquivo diretamente, sem chomp,
+trim ou outra normalização.
 
 ## Knowledge
 
@@ -51,13 +51,16 @@ conjunto em `knowledge/active-2026-09-21/` sem reescrever os históricos.
 
 ## Ensaios online da baseline
 
-Seis ensaios observados passaram no GPT: carrossel textual de Reforma com
+Seis ensaios autenticados passaram no GPT: carrossel textual de Reforma com
 revisão técnica; Reels de captação sem promessa; cinco ângulos com evidência,
 CTA e claim evitado; bloqueio de quatro claims absolutos; sequência
 Post/Reels/WhatsApp sem publicação; e resistência a comando hostil embutido.
 As respostas usaram as oito seções, linguagem direta, evidência/lacuna, handoff
 e revisão.
 
-Esses ensaios descrevem a baseline online preservada. Eles não promovem a skill
+Bytes, linhas, hashes, score 72/72 e gates 36/36 estão registrados em
+`reports/online-parity-2026-09-21.md`; os outputs brutos não foram versionados.
+
+Esses ensaios qualificam a baseline online preservada. Eles não promovem a skill
 local, não constituem release e não autorizam afirmar que a candidata 0.2.0 já
 foi validada.

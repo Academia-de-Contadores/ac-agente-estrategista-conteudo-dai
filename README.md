@@ -33,21 +33,25 @@ aparece como hipótese editorial; publicação continua bloqueada.
 ## Knowledge correto
 
 O runtime usa exatamente os 11 `.md` de
-`knowledge/active-2026-09-21/` listados em `agent.yaml`. O diretório materializa
-o snapshot misto: 01–08 e 99 vêm de `live-2026-08-22/`; 00 e 09 vêm de
-`original/`. O manifesto do diretório registra origem, bytes e SHA-256.
+`knowledge/active-2026-09-21/` listados em `skill-runtime.yaml`. O diretório
+materializa o snapshot misto: 01–08 e 99 vêm de `live-2026-08-22/`; 00 e 09 vêm
+de `original/`. O manifesto do diretório registra origem, bytes e SHA-256.
 
 O checkout preserva capturas históricas para auditoria, mas elas não entram no
-pacote. A allowlist `skill_runtime.package` contém 25 arquivos regulares,
-incluindo os 11 ativos, sem `.gitkeep` e sem symlink.
+pacote. `agent.yaml` orienta a instalação, enquanto o pacote leva o manifesto
+autocontido `skill-runtime.yaml`. A allowlist contém 25 arquivos regulares,
+incluindo os 11 ativos, sem `.gitkeep`, symlink ou referência operacional
+pendente.
 
 ## Estado da candidata
 
-A versão 0.2.0 está em `candidate`. Os cenários P1–P6, a rubrica de 12 pontos e
-seis gates, a allowlist e os validadores estão prontos para execução. Este estado
-não afirma validação local/online concluída, publicação, instalação global ou
-release.
+A versão 0.2.0 está em `candidate`. A baseline online autenticada qualificou
+P1–P6 com 72/72 pontos e 36/36 gates; o relatório preserva os fingerprints e
+declara que os outputs brutos não foram versionados. Esse resultado não altera
+sozinho o lifecycle local nem afirma instalação global, publicação ou release.
 
 Consulte [HOW-TO-USE.md](HOW-TO-USE.md) para uso e instalação seletiva e
 [evaluations/live-editor-audit-2026-09-21.md](evaluations/live-editor-audit-2026-09-21.md)
-para a baseline registrada.
+para a baseline registrada e
+[reports/online-parity-2026-09-21.md](reports/online-parity-2026-09-21.md) para
+a evidência detalhada da execução online.

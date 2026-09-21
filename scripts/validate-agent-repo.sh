@@ -22,11 +22,13 @@ required=(
   instructions/guardrails.md
   instructions/workflows/main.md
   SKILL.md
+  skill-runtime.yaml
   agents/openai.yaml
   references/evidence-policy.md
   references/content-outputs.md
   references/approval-policy.md
   evaluations/parity/questions.yaml
+  reports/online-parity-2026-09-21.md
   scripts/validate-content-skill.rb
   governance/CONTRIBUTING.md
   governance/CHANGE-POLICY.md

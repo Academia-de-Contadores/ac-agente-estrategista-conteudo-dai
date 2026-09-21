@@ -34,3 +34,6 @@ Se faltar qualquer campo, registre `GATE HUMANO — BLOQUEADO` e mantenha
 `NÃO PUBLICADO / NÃO ENVIADO`. Aprovação do tema, plano, calendário, texto-base
 ou ação anterior não autoriza a ação atual. Esta skill não possui conector
 próprio e não simula publicação.
+
+Os arquivos disponíveis para esta política estão declarados em
+`skill-runtime.yaml`. Não dependa de caminho ausente da instalação.

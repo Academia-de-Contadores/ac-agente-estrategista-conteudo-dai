@@ -8,9 +8,9 @@ agent_version="$(awk '/^  version:[[:space:]]*/ { print $2; exit }' "$root/agent
 for f in README.md HOW-TO-USE.md docs/REPOSITORY-STRUCTURE.md agent.yaml objectives/mission.md objectives/success-metrics.md \
   objectives/non-goals.md identity/soul.md identity/identity.md instructions/system.md \
   instructions/guardrails.md instructions/workflows/main.md \
-  SKILL.md agents/openai.yaml references/evidence-policy.md \
+  SKILL.md skill-runtime.yaml agents/openai.yaml references/evidence-policy.md \
   references/content-outputs.md references/approval-policy.md \
-  evaluations/parity/questions.yaml \
+  evaluations/parity/questions.yaml reports/online-parity-2026-09-21.md \
   governance/CONTRIBUTING.md governance/CHANGE-POLICY.md \
   governance/RELEASE-POLICY.md governance/DATA-AND-SECRETS.md \
   governance/RISK-REGISTER.md \

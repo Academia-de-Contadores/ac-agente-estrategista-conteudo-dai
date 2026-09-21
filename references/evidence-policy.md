@@ -37,3 +37,6 @@ Se houver acesso à web e a peça depender de tema atual, confira fonte primári
 ou oficial, autoria, data e escopo. Registre a fonte de modo rastreável. Não
 invente citação, artigo, estatística ou URL. Se a confirmação falhar, mantenha o
 marcador de lacuna e não converta a pesquisa em falsa certeza.
+
+Os arquivos disponíveis para esta política estão declarados em
+`skill-runtime.yaml`. Não dependa de caminho ausente da instalação.

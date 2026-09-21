@@ -31,7 +31,7 @@ sempre atualiza a versão e as avaliações correspondentes.
 | Mudança | Arquivos mínimos |
 | --- | --- |
 | Objetivo, identidade ou comportamento permanente | componente canônico afetado, `agent.yaml`, avaliação e `CHANGELOG.md` |
-| Skill ou workflow | `SKILL.md`, referências, avaliação e `skill_runtime` em `agent.yaml` |
+| Skill ou workflow | `SKILL.md`, `skill-runtime.yaml`, referências, avaliação e `skill_runtime` em `agent.yaml` |
 | Knowledge | arquivo curado, manifesto com fonte/data/licença/hash e avaliação se alterar resposta ou risco |
 | Connector ou Action | contrato, exemplo sem segredo, fallback, avaliação e `agent.yaml` |
 | Profile ou adapter | manifesto com `canonical_agent_version`, documentação de limitação e regressão aplicável |

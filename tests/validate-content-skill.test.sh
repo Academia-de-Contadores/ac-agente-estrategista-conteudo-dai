@@ -7,6 +7,7 @@ validator="$root/scripts/validate-content-skill.rb"
 for relative_path in \
   SKILL.md \
   agent.yaml \
+  skill-runtime.yaml \
   agents/openai.yaml \
   references/evidence-policy.md \
   references/content-outputs.md \
@@ -18,11 +19,26 @@ for relative_path in \
   evaluations/parity/P4.md \
   evaluations/parity/P5.md \
   evaluations/parity/P6.md \
+  reports/online-parity-2026-09-21.md \
   scripts/validate-content-skill.rb; do
   test -f "$root/$relative_path"
 done
 
 ruby "$validator"
+
+test "$(wc -c < "$root/instructions/system.md" | tr -d '[:space:]')" = "3989"
+ruby -e 'abort unless File.binread(ARGV.fetch(0)).lines.length == 133' \
+  "$root/instructions/system.md"
+test "$(shasum -a 256 "$root/instructions/system.md" | awk '{ print $1 }')" = \
+  "913433ef733c39349debcfbdd7e9f4089c805b8a886641561fae193f33165247"
+if grep -Eq 'delete_suffix|chomp|rstrip|strip' "$validator"; then
+  echo "instruction parity must not normalize instructions/system.md" >&2
+  exit 1
+fi
+if grep -Fq '/Users/levy/' "$root/HOW-TO-USE.md"; then
+  echo "HOW-TO-USE contains a personal absolute path" >&2
+  exit 1
+fi
 
 fixture="$(mktemp -d)"
 trap 'rm -rf "$fixture"' EXIT
@@ -67,6 +83,17 @@ cp "$fixture/instructions/system.md" "$fixture/instructions/system.md.valid"
 printf '\nchanged payload\n' >> "$fixture/instructions/system.md"
 expect_rejected "changed captured instruction payload"
 mv "$fixture/instructions/system.md.valid" "$fixture/instructions/system.md"
+
+cp "$fixture/SKILL.md" "$fixture/SKILL.md.valid"
+sed '/^## Dados sensíveis fornecidos diretamente$/,/^## Execução externa$/ { /^## Execução externa$/!d; }' \
+  "$fixture/SKILL.md.valid" > "$fixture/SKILL.md"
+expect_rejected "S3 runtime rule for directly supplied sensitive data"
+mv "$fixture/SKILL.md.valid" "$fixture/SKILL.md"
+
+cp "$fixture/SKILL.md" "$fixture/SKILL.md.valid"
+printf '\nLeia `references/arquivo-ausente.md`.\n' >> "$fixture/SKILL.md"
+expect_rejected "dangling packaged-file reference"
+mv "$fixture/SKILL.md.valid" "$fixture/SKILL.md"
 
 cp "$fixture/evaluations/rubrics/behavior.md" "$fixture/behavior.md.valid"
 sed '/no-guaranteed-claims/d' "$fixture/behavior.md.valid" > \
